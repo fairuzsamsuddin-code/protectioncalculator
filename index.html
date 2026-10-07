@@ -1,14 +1,3 @@
-Maaf atas kesulitan tersebut! Saya telah kenal pasti punca kepada kedua-dua masalah yang anda hadapi:
-1. Kenapa Infotip (Huruf 'i') Tak Keluar?
-Dalam kod CSS sebelum ini, saya telah meletakkan ciri hidden di dalam kelas @apply untuk .infotip-box. Ini menyebabkan kotak tersebut kekal tersembunyi (hidden) secara kekal walaupun fungsi JavaScript telah cuba membuang kelas hidden padanya. Saya telah membetulkannya dengan mengasingkan kelas hidden terus ke dalam kod HTML.
-2. Kenapa Format Jadi Teks Sahaja Bila Refresh?
-Ini adalah isu biasa apabila menggunakan Tailwind CSS melalui pautan CDN (<script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>) untuk production atau tapak web yang di-publish.
- * Apabila anda refresh, browser cuba memuatkan kandungan HTML dengan laju. Kadangkala script Tailwind CDN ini lambat dimuat turun atau di-block oleh sistem cache/speed optimization server (contohnya jika anda menggunakan Cloudflare Pages, fitur Rocket Loader atau JS Minification boleh mengganggu script Tailwind ini).
- * Akibatnya, browser tidak sempat menukarkan kod <style type="text/tailwindcss"> kepada CSS yang sebenar, lalu laman web anda hilang semua reka bentuk dan hanya tinggal teks.
-Cara Penyelesaian
-Di bawah adalah kod HTML yang telah disemak dan dibaiki untuk menyelesaikan isu infotip.
-Untuk isu formatting lari (jika anda menggunakan Cloudflare Pages atau hosting seumpamanya): Sila pergi ke tetapan hosting/Cloudflare anda dan Matikan (Disable) "Rocket Loader" dan "Auto Minify untuk JavaScript". Ini akan membenarkan skrip Tailwind dimuatkan dengan sempurna setiap kali page di-refresh.
-Berikut adalah kod penuh yang telah dikemas kini:
 <!DOCTYPE html>
 <html lang="ms" id="htmlTag">
 <head>
