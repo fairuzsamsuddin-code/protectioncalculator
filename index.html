@@ -160,8 +160,8 @@
             align-items: center; justify-content: center; padding: 1rem; overflow-y: auto;
         }
         .modal-content {
-            background: #ffffff; color: #1e293b; width: 100%; max-width: 700px;
-            border-radius: 1rem; padding: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            background: #ffffff; color: #1e293b; width: 100%; max-width: 680px;
+            border-radius: 1rem; padding: 1.25rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             position: relative; max-height: 95vh; overflow-y: auto;
         }
 
@@ -181,7 +181,7 @@
             .modal-content { 
                 box-shadow: none !important; max-height: 297mm !important; 
                 width: 210mm !important; height: 297mm !important; 
-                padding: 10mm 12mm !important; margin: 0 !important; border: none !important;
+                padding: 6mm 10mm !important; margin: 0 !important; border: none !important;
                 overflow: hidden !important; background: white !important;
             }
             .no-print { display: none !important; }
@@ -483,122 +483,122 @@
 
     </main>
 
-    <!-- Report Preview Modal (A4 Single-Page Strict Layout with Meter Visuals) -->
+    <!-- Report Preview Modal (Strict Single-Page A4 Meter Layout) -->
     <div id="reportModal">
         <div class="modal-content">
             <!-- Modal Header Actions -->
-            <div class="no-print" style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 6px; gap: 8px;">
-                <button type="button" onclick="window.print()" style="background: #0284c7; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 11px;">
+            <div class="no-print" style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 5px; gap: 8px;">
+                <button type="button" onclick="window.print()" style="background: #0284c7; color: white; border: none; padding: 4px 10px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 11px;">
                     <i class="fas fa-print" style="margin-right: 4px;"></i> <span data-translate="btn_print">Cetak / Simpan PDF</span>
                 </button>
-                <button type="button" id="btnCloseModal" style="background: #64748b; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 11px;">
+                <button type="button" id="btnCloseModal" style="background: #64748b; color: white; border: none; padding: 4px 10px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 11px;">
                     <i class="fas fa-times" style="margin-right: 4px;"></i> <span data-translate="btn_close">Tutup</span>
                 </button>
             </div>
 
             <!-- Report Body -->
             <div id="pdf-report">
-                <div style="border-bottom: 2px solid #D9000D; padding-bottom: 5px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div style="border-bottom: 2px solid #D9000D; padding-bottom: 4px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: flex-end;">
                     <div>
-                        <h1 style="font-size: 15px; font-weight: 800; color: #D9000D; margin: 0; text-transform: uppercase;" id="pdfTitle">Laporan Keperluan Perlindungan</h1>
-                        <p style="margin: 2px 0 0 0; color: #64748b; font-size: 9px;" id="pdfDate"></p>
+                        <h1 style="font-size: 14px; font-weight: 800; color: #D9000D; margin: 0; text-transform: uppercase;" id="pdfTitle">Laporan Keperluan Perlindungan</h1>
+                        <p style="margin: 1px 0 0 0; color: #64748b; font-size: 8.5px;" id="pdfDate"></p>
                     </div>
                     <div style="text-align: right;">
-                        <h2 style="font-size: 11px; font-weight: 700; margin: 0; color: #1e293b;">TAKAFUL SERVICES</h2>
-                        <p style="margin: 0; color: #64748b; font-size: 8px;">oleh Fairuz Samsuddin</p>
+                        <h2 style="font-size: 10.5px; font-weight: 700; margin: 0; color: #1e293b;">TAKAFUL SERVICES</h2>
+                        <p style="margin: 0; color: #64748b; font-size: 7.5px;">oleh Fairuz Samsuddin</p>
                     </div>
                 </div>
 
                 <!-- Status Banner -->
-                <div id="reportStatusBanner" style="padding: 5px; border-radius: 4px; margin-bottom: 6px; text-align: center; font-weight: bold; font-size: 10px; background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5;">
+                <div id="reportStatusBanner" style="padding: 4px; border-radius: 4px; margin-bottom: 5px; text-align: center; font-weight: bold; font-size: 9.5px; background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5;">
                     STATUS PERLINDUNGAN: PERLU DITAMBAHBAIK
                 </div>
 
                 <!-- Inputs Summary -->
-                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                     <div style="width: 48%;">
-                        <h3 style="font-size: 9px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 3px;" id="pdfSub1">Maklumat Kewangan</h3>
-                        <p style="font-size: 9px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfIncL">Pendapatan Bulanan:</span> <strong id="repIncome">RM 0</strong></p>
-                        <p style="font-size: 9px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfExpL">Perbelanjaan Bulanan:</span> <strong id="repExpense">RM 0</strong></p>
-                        <p style="font-size: 9px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfDebtL">Jumlah Hutang Tertunggak:</span> <strong id="repDebt">RM 0</strong></p>
-                        <p style="font-size: 9px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfInfL">Kadar Inflasi:</span> <strong id="repInflation">3%</strong></p>
+                        <h3 style="font-size: 8.5px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 2px;" id="pdfSub1">Maklumat Kewangan</h3>
+                        <p style="font-size: 8.5px; display: flex; justify-content: space-between; margin: 1px 0;"><span id="pdfIncL">Pendapatan Bulanan:</span> <strong id="repIncome">RM 0</strong></p>
+                        <p style="font-size: 8.5px; display: flex; justify-content: space-between; margin: 1px 0;"><span id="pdfExpL">Perbelanjaan Bulanan:</span> <strong id="repExpense">RM 0</strong></p>
+                        <p style="font-size: 8.5px; display: flex; justify-content: space-between; margin: 1px 0;"><span id="pdfDebtL">Jumlah Hutang Tertunggak:</span> <strong id="repDebt">RM 0</strong></p>
+                        <p style="font-size: 8.5px; display: flex; justify-content: space-between; margin: 1px 0;"><span id="pdfInfL">Kadar Inflasi:</span> <strong id="repInflation">3%</strong></p>
                     </div>
                     <div style="width: 48%;">
-                        <h3 style="font-size: 9px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 3px;" id="pdfSub2">Parameter Perlindungan</h3>
-                        <p style="font-size: 9px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfLifeYL">Tahun Sokongan Hayat:</span> <strong id="repLifeYears">10 Tahun</strong></p>
-                        <p style="font-size: 9px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfCIYL">Tahun Sokongan CI:</span> <strong id="repCIYears">3 Tahun</strong></p>
+                        <h3 style="font-size: 8.5px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 2px;" id="pdfSub2">Parameter Perlindungan</h3>
+                        <p style="font-size: 8.5px; display: flex; justify-content: space-between; margin: 1px 0;"><span id="pdfLifeYL">Tahun Sokongan Hayat:</span> <strong id="repLifeYears">10 Tahun</strong></p>
+                        <p style="font-size: 8.5px; display: flex; justify-content: space-between; margin: 1px 0;"><span id="pdfCIYL">Tahun Sokongan CI:</span> <strong id="repCIYears">3 Tahun</strong></p>
                     </div>
                 </div>
 
                 <!-- Table Comparison -->
-                <h3 style="font-size: 9px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 4px;" id="pdfSub3">Ringkasan Keperluan vs Sedia Ada</h3>
-                <table style="width: 100%; border-collapse: collapse; margin-bottom: 6px; font-size: 9px;">
+                <h3 style="font-size: 8.5px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 3px;" id="pdfSub3">Ringkasan Keperluan vs Sedia Ada</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 5px; font-size: 8.5px;">
                     <thead>
                         <tr style="background: #f1f5f9;">
-                            <th style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: left; color: #0f172a;" id="pdfTh1">Kategori</th>
-                            <th style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh2">Sedia Ada (RM)</th>
-                            <th style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh3">Sasaran Keperluan (RM)</th>
-                            <th style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh4">Kekurangan / Gap (RM)</th>
+                            <th style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: left; color: #0f172a;" id="pdfTh1">Kategori</th>
+                            <th style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh2">Sedia Ada (RM)</th>
+                            <th style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh3">Sasaran Keperluan (RM)</th>
+                            <th style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh4">Kekurangan / Gap (RM)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd1">Hayat / Hibah</td>
-                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeExist">0</td>
-                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeReqTbl">0</td>
-                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repLifeGapTbl">0</td>
+                            <td style="padding: 2px 4px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd1">Hayat / Hibah</td>
+                            <td style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeExist">0</td>
+                            <td style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeReqTbl">0</td>
+                            <td style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repLifeGapTbl">0</td>
                         </tr>
                         <tr>
-                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd2">Sakit Kritikal</td>
-                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIExist">0</td>
-                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIReqTbl">0</td>
-                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repCIGapTbl">0</td>
+                            <td style="padding: 2px 4px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd2">Sakit Kritikal</td>
+                            <td style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIExist">0</td>
+                            <td style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIReqTbl">0</td>
+                            <td style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repCIGapTbl">0</td>
                         </tr>
                         <tr>
-                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd3">Had Perubatan</td>
-                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedExist">0</td>
-                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedReqTbl">0</td>
-                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repMedGapTbl">0</td>
+                            <td style="padding: 2px 4px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd3">Had Perubatan</td>
+                            <td style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedExist">0</td>
+                            <td style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedReqTbl">0</td>
+                            <td style="padding: 2px 4px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repMedGapTbl">0</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <!-- Meter / Progress Indicators Section -->
-                <h3 style="font-size: 9px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 5px;" id="pdfSub4">Meter Tahap Pencapaian Perlindungan</h3>
-                <div style="display: flex; flex-direction: column; gap: 5px;" id="meterContainer">
+                <h3 style="font-size: 8.5px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 4px;" id="pdfSub4">Meter Tahap Pencapaian Perlindungan</h3>
+                <div style="display: flex; flex-direction: column; gap: 4px;" id="meterContainer">
                     <!-- Meter 1: Life -->
                     <div>
-                        <div style="display: flex; justify-content: space-between; font-size: 8.5px; margin-bottom: 2px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 8px; margin-bottom: 1px;">
                             <span style="font-weight: 600; color: #1e293b;" id="meterLabel1">Hayat / Hibah</span>
                             <span style="color: #64748b;" id="meterText1">0% (RM 0 / RM 0)</span>
                         </div>
-                        <div style="width: 100%; height: 7px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
+                        <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
                             <div id="meterBar1" style="height: 100%; width: 0%; background: #008183; border-radius: 9999px;"></div>
                         </div>
                     </div>
                     <!-- Meter 2: CI -->
                     <div>
-                        <div style="display: flex; justify-content: space-between; font-size: 8.5px; margin-bottom: 2px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 8px; margin-bottom: 1px;">
                             <span style="font-weight: 600; color: #1e293b;" id="meterLabel2">Sakit Kritikal</span>
                             <span style="color: #64748b;" id="meterText2">0% (RM 0 / RM 0)</span>
                         </div>
-                        <div style="width: 100%; height: 7px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
+                        <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
                             <div id="meterBar2" style="height: 100%; width: 0%; background: #008183; border-radius: 9999px;"></div>
                         </div>
                     </div>
                     <!-- Meter 3: Medical -->
                     <div>
-                        <div style="display: flex; justify-content: space-between; font-size: 8.5px; margin-bottom: 2px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 8px; margin-bottom: 1px;">
                             <span style="font-weight: 600; color: #1e293b;" id="meterLabel3">Had Perubatan</span>
                             <span style="color: #64748b;" id="meterText3">0% (RM 0 / RM 0)</span>
                         </div>
-                        <div style="width: 100%; height: 7px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
+                        <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
                             <div id="meterBar3" style="height: 100%; width: 0%; background: #008183; border-radius: 9999px;"></div>
                         </div>
                     </div>
                 </div>
                 
-                <p style="font-size: 7.5px; color: #94a3b8; text-align: center; margin-top: 6px; border-top: 1px solid #e2e8f0; padding-top: 3px;" id="pdfFooter">
+                <p style="font-size: 7px; color: #94a3b8; text-align: center; margin-top: 5px; border-top: 1px solid #e2e8f0; padding-top: 3px;" id="pdfFooter">
                     * Laporan ini dijana melalui Kalkulator Keperluan Perlindungan dan berfungsi sebagai rujukan kewangan asas. Sila dapatkan nasihat terperinci daripada Perunding Takaful bertauliah.
                 </p>
             </div>
