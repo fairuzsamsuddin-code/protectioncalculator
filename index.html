@@ -163,18 +163,27 @@
             align-items: center; justify-content: center; padding: 1rem; overflow-y: auto;
         }
         .modal-content {
-            background: #ffffff; color: #1e293b; width: 100%; max-width: 800px;
-            border-radius: 1rem; padding: 2.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            position: relative; max-height: 90vh; overflow-y: auto;
+            background: #ffffff; color: #1e293b; width: 100%; max-width: 750px;
+            border-radius: 1rem; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative; max-height: 95vh; overflow-y: auto;
         }
 
-        /* Print Styling */
+        /* Strict A4 Single-Page Print Rules */
         @media print {
             body * { visibility: hidden; }
             #reportModal, #reportModal * { visibility: visible; }
-            #reportModal { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 0; }
-            .modal-content { box-shadow: none; max-height: none; width: 100%; padding: 15mm; }
+            #reportModal { 
+                position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; 
+                background: white !important; padding: 0 !important; margin: 0 !important;
+                display: flex !important; align-items: center; justify-content: center;
+            }
+            .modal-content { 
+                box-shadow: none !important; max-height: none !important; 
+                width: 100% !important; height: 100% !important; 
+                padding: 10mm !important; margin: 0 !important; border: none !important;
+            }
             .no-print { display: none !important; }
+            @page { size: A4 portrait; margin: 0; }
         }
     </style>
 </head>
@@ -270,7 +279,7 @@
                         </div>
                         <div style="position: relative;">
                             <label class="form-label">
-                                <span data-translate="calc_debt">Hutang Tertunggak</span>
+                                <span data-translate="calc_debt">Jumlah Hutang Tertunggak</span>
                                 <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
                                     <button type="button" onclick="toggleTooltip(event, 'tip-debt')" style="background:none; border:none; cursor:pointer;">
                                         <i class="fas fa-info-circle" style="color: var(--text-muted); font-size: 0.9rem;"></i>
@@ -293,7 +302,7 @@
                     <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
                         <div style="position: relative;">
                             <label class="form-label">
-                                <span data-translate="calc_exist_life">Hayat/Hibah Sedia Ada</span>
+                                <span data-translate="calc_exist_life">Perlindungan Hayat/Hibah Sedia Ada</span>
                                 <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
                                     <button type="button" onclick="toggleTooltip(event, 'tip-exist-life')" style="background:none; border:none; cursor:pointer;">
                                         <i class="fas fa-info-circle" style="color: var(--text-muted); font-size: 0.9rem;"></i>
@@ -349,7 +358,7 @@
                     <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
                         <div style="position: relative;">
                             <label class="form-label">
-                                <span data-translate="calc_exist_ci">Sakit Kritikal Sedia Ada</span>
+                                <span data-translate="calc_exist_ci">Perlindungan Sakit Kritikal Sedia Ada</span>
                                 <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
                                     <button type="button" onclick="toggleTooltip(event, 'tip-exist-ci')" style="background:none; border:none; cursor:pointer;">
                                         <i class="fas fa-info-circle" style="color: var(--text-muted); font-size: 0.9rem;"></i>
@@ -404,7 +413,7 @@
                         </div>
                         <div style="position: relative;">
                             <label class="form-label">
-                                <span data-translate="calc_target_med">Sasaran Had Perubatan (Asas)</span>
+                                <span data-translate="calc_target_med">Sasaran Had Perubatan</span>
                                 <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
                                     <button type="button" onclick="toggleTooltip(event, 'tip-target-med')" style="background:none; border:none; cursor:pointer;">
                                         <i class="fas fa-info-circle" style="color: var(--text-muted); font-size: 0.9rem;"></i>
@@ -462,7 +471,7 @@
                     <!-- PDF Generation Button -->
                     <div style="text-align: center; margin-top: 3rem;">
                         <button type="button" id="btnOpenReport" class="btn-primary btn-pdf">
-                            <i class="fas fa-file-pdf"></i> <span data-translate="btn_pdf">Jana & Pratonton Laporan PDF</span>
+                            <i class="fas fa-file-pdf"></i> <span data-translate="btn_pdf">Jana Laporan PDF</span>
                         </button>
                         <p style="text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 1.5rem;" data-translate="calc_disclaimer">* Anggaran ini telah diselaraskan dengan faktor inflasi sebagai rujukan asas kewangan anda.</p>
                     </div>
@@ -472,96 +481,93 @@
 
     </main>
 
-    <!-- Report Preview Modal (A4 Professional Design) -->
+    <!-- Report Preview Modal (A4 Single-Page Strict Layout) -->
     <div id="reportModal">
         <div class="modal-content">
             <!-- Modal Header Actions -->
-            <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #e2e8f0;">
-                <span style="font-weight: 600; font-size: 14px; color: #64748b;" data-translate="modal_hint">Pratonton Laporan A4</span>
-                <div style="display: flex; gap: 10px;">
-                    <button type="button" onclick="window.print()" style="background: #0284c7; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px;">
-                        <i class="fas fa-print" style="margin-right: 5px;"></i> <span data-translate="btn_print">Cetak / Simpan PDF</span>
-                    </button>
-                    <button type="button" id="btnCloseModal" style="background: #64748b; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px;">
-                        <i class="fas fa-times" style="margin-right: 5px;"></i> <span data-translate="btn_close">Tutup</span>
-                    </button>
-                </div>
+            <div class="no-print" style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px; gap: 8px;">
+                <button type="button" onclick="window.print()" style="background: #0284c7; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px;">
+                    <i class="fas fa-print" style="margin-right: 4px;"></i> <span data-translate="btn_print">Cetak / Simpan PDF</span>
+                </button>
+                <button type="button" id="btnCloseModal" style="background: #64748b; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px;">
+                    <i class="fas fa-times" style="margin-right: 4px;"></i> <span data-translate="btn_close">Tutup</span>
+                </button>
             </div>
 
             <!-- Report Body -->
             <div id="pdf-report">
-                <div style="border-bottom: 3px solid #D9000D; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div style="border-bottom: 2px solid #D9000D; padding-bottom: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-end;">
                     <div>
-                        <h1 style="font-size: 20px; font-weight: 800; color: #D9000D; margin: 0; text-transform: uppercase;" id="pdfTitle">Laporan Keperluan Perlindungan</h1>
-                        <p style="margin: 4px 0 0 0; color: #64748b; font-size: 11px;" id="pdfDate"></p>
+                        <h1 style="font-size: 18px; font-weight: 800; color: #D9000D; margin: 0; text-transform: uppercase;" id="pdfTitle">Laporan Keperluan Perlindungan</h1>
+                        <p style="margin: 3px 0 0 0; color: #64748b; font-size: 10px;" id="pdfDate"></p>
                     </div>
                     <div style="text-align: right;">
-                        <h2 style="font-size: 14px; font-weight: 700; margin: 0; color: #1e293b;">TAKAFUL SERVICES</h2>
-                        <p style="margin: 0; color: #64748b; font-size: 10px;">oleh Fairuz Samsuddin</p>
+                        <h2 style="font-size: 13px; font-weight: 700; margin: 0; color: #1e293b;">TAKAFUL SERVICES</h2>
+                        <p style="margin: 0; color: #64748b; font-size: 9px;">oleh Fairuz Samsuddin</p>
                     </div>
                 </div>
 
                 <!-- Status Banner -->
-                <div id="reportStatusBanner" style="padding: 10px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-weight: bold; font-size: 13px; background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5;">
+                <div id="reportStatusBanner" style="padding: 8px; border-radius: 4px; margin-bottom: 12px; text-align: center; font-weight: bold; font-size: 12px; background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5;">
                     STATUS PERLINDUNGAN: PERLU DITAMBAHBAIK
                 </div>
 
                 <!-- Inputs Summary -->
-                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
                     <div style="width: 48%;">
-                        <h3 style="font-size: 11px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px; margin-bottom: 6px;" id="pdfSub1">Maklumat Kewangan</h3>
-                        <p style="font-size: 11px; display: flex; justify-content: space-between; margin: 3px 0;"><span id="pdfIncL">Pendapatan Bulanan:</span> <strong id="repIncome">RM 0</strong></p>
-                        <p style="font-size: 11px; display: flex; justify-content: space-between; margin: 3px 0;"><span id="pdfExpL">Perbelanjaan Bulanan:</span> <strong id="repExpense">RM 0</strong></p>
-                        <p style="font-size: 11px; display: flex; justify-content: space-between; margin: 3px 0;"><span id="pdfDebtL">Hutang Tertunggak:</span> <strong id="repDebt">RM 0</strong></p>
-                        <p style="font-size: 11px; display: flex; justify-content: space-between; margin: 3px 0;"><span id="pdfInfL">Kadar Inflasi:</span> <strong id="repInflation">3%</strong></p>
+                        <h3 style="font-size: 10px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 4px;" id="pdfSub1">Maklumat Kewangan</h3>
+                        <p style="font-size: 10px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfIncL">Pendapatan Bulanan:</span> <strong id="repIncome">RM 0</strong></p>
+                        <p style="font-size: 10px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfExpL">Perbelanjaan Bulanan:</span> <strong id="repExpense">RM 0</strong></p>
+                        <p style="font-size: 10px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfDebtL">Jumlah Hutang Tertunggak:</span> <strong id="repDebt">RM 0</strong></p>
+                        <p style="font-size: 10px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfInfL">Kadar Inflasi:</span> <strong id="repInflation">3%</strong></p>
                     </div>
                     <div style="width: 48%;">
-                        <h3 style="font-size: 11px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px; margin-bottom: 6px;" id="pdfSub2">Parameter Perlindungan</h3>
-                        <p style="font-size: 11px; display: flex; justify-content: space-between; margin: 3px 0;"><span id="pdfLifeYL">Tahun Sokongan Hayat:</span> <strong id="repLifeYears">10 Tahun</strong></p>
-                        <p style="font-size: 11px; display: flex; justify-content: space-between; margin: 3px 0;"><span id="pdfCIYL">Tahun Sokongan CI:</span> <strong id="repCIYears">3 Tahun</strong></p>
+                        <h3 style="font-size: 10px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 4px;" id="pdfSub2">Parameter Perlindungan</h3>
+                        <p style="font-size: 10px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfLifeYL">Tahun Sokongan Hayat:</span> <strong id="repLifeYears">10 Tahun</strong></p>
+                        <p style="font-size: 10px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfCIYL">Tahun Sokongan CI:</span> <strong id="repCIYears">3 Tahun</strong></p>
                     </div>
                 </div>
 
                 <!-- Table Comparison -->
-                <h3 style="font-size: 11px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px; margin-bottom: 8px;" id="pdfSub3">Ringkasan Keperluan vs Sedia Ada</h3>
-                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 11px;">
+                <h3 style="font-size: 10px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 6px;" id="pdfSub3">Ringkasan Keperluan vs Sedia Ada</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10px;">
                     <thead>
                         <tr style="background: #f1f5f9;">
-                            <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: left; color: #0f172a;" id="pdfTh1">Kategori</th>
-                            <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh2">Sedia Ada (RM)</th>
-                            <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh3">Sasaran Keperluan (RM)</th>
-                            <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh4">Kekurangan / Gap (RM)</th>
+                            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: left; color: #0f172a;" id="pdfTh1">Kategori</th>
+                            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh2">Sedia Ada (RM)</th>
+                            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh3">Sasaran Keperluan (RM)</th>
+                            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh4">Kekurangan / Gap (RM)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 6px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd1">Hayat / Hibah</td>
-                            <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeExist">0</td>
-                            <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeReqTbl">0</td>
-                            <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repLifeGapTbl">0</td>
+                            <td style="padding: 5px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd1">Hayat / Hibah</td>
+                            <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeExist">0</td>
+                            <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeReqTbl">0</td>
+                            <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repLifeGapTbl">0</td>
                         </tr>
                         <tr>
-                            <td style="padding: 6px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd2">Sakit Kritikal</td>
-                            <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIExist">0</td>
-                            <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIReqTbl">0</td>
-                            <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repCIGapTbl">0</td>
+                            <td style="padding: 5px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd2">Sakit Kritikal</td>
+                            <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIExist">0</td>
+                            <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIReqTbl">0</td>
+                            <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repCIGapTbl">0</td>
                         </tr>
                         <tr>
-                            <td style="padding: 6px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd3">Had Perubatan</td>
-                            <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedExist">0</td>
-                            <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedReqTbl">0</td>
-                            <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repMedGapTbl">0</td>
+                            <td style="padding: 5px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd3">Had Perubatan</td>
+                            <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedExist">0</td>
+                            <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedReqTbl">0</td>
+                            <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repMedGapTbl">0</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <!-- Chart -->
-                <h3 style="font-size: 11px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px; margin-bottom: 8px;" id="pdfSub4">Graf Analisis Perlindungan</h3>
-                <div style="height: 180px; width: 100%; display: flex; justify-content: center; position: relative;">
+                <h3 style="font-size: 10px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 6px;" id="pdfSub4">Graf Analisis Perlindungan</h3>
+                <div style="height: 140px; width: 100%; display: flex; justify-content: center; position: relative;">
                     <canvas id="protectionChart"></canvas>
                 </div>
                 
-                <p style="font-size: 9px; color: #94a3b8; text-align: center; margin-top: 15px; border-top: 1px solid #e2e8f0; padding-top: 8px;" id="pdfFooter">
+                <p style="font-size: 8px; color: #94a3b8; text-align: center; margin-top: 10px; border-top: 1px solid #e2e8f0; padding-top: 6px;" id="pdfFooter">
                     * Laporan ini dijana melalui Kalkulator Keperluan Perlindungan dan berfungsi sebagai rujukan kewangan asas. Sila dapatkan nasihat terperinci daripada Perunding Takaful bertauliah.
                 </p>
             </div>
@@ -600,13 +606,13 @@
                 calc_error: "Nota: Perbelanjaan bulanan anda melebihi pendapatan bulanan. Sila semak semula.",
                 calc_income: "Pendapatan Bulanan",
                 calc_expenses: "Perbelanjaan Bulanan",
-                calc_debt: "Hutang Tertunggak",
-                calc_exist_life: "Hayat/Hibah Sedia Ada",
+                calc_debt: "Jumlah Hutang Tertunggak",
+                calc_exist_life: "Perlindungan Hayat/Hibah Sedia Ada",
                 calc_life_years: "Tahun Sokongan",
-                calc_exist_ci: "Sakit Kritikal Sedia Ada",
+                calc_exist_ci: "Perlindungan Sakit Kritikal Sedia Ada",
                 calc_ci_years: "Sokongan Sakit Kritikal",
                 calc_exist_med: "Had Perubatan Sedia Ada",
-                calc_target_med: "Sasaran Had Perubatan (Asas)",
+                calc_target_med: "Sasaran Had Perubatan",
                 calc_inflation: "Kadar Inflasi Tahunan",
                 calc_years: "Tahun",
                 calc_btn: "Kira Keperluan Semasa",
@@ -617,10 +623,9 @@
                 calc_shortfall: "Kekurangan: ",
                 calc_covered: "Dilindungi Penuh",
                 calc_disclaimer: "* Anggaran ini telah diselaraskan dengan faktor inflasi sebagai rujukan asas kewangan anda.",
-                btn_pdf: "Jana & Pratonton Laporan PDF",
+                btn_pdf: "Jana Laporan PDF",
                 btn_print: "Cetak / Simpan PDF",
                 btn_close: "Tutup",
-                modal_hint: "Pratonton Laporan A4",
                 
                 pdf_title: "LAPORAN KEPERLUAN PERLINDUNGAN",
                 pdf_date: "Tarikh: ",
@@ -662,13 +667,13 @@
                 calc_error: "Note: Your monthly expenses exceed your monthly income. Please double-check.",
                 calc_income: "Monthly Income",
                 calc_expenses: "Monthly Expenses",
-                calc_debt: "Outstanding Debt",
-                calc_exist_life: "Existing Life / Hibah",
+                calc_debt: "Total Outstanding Debt",
+                calc_exist_life: "Existing Life / Hibah Protection",
                 calc_life_years: "Years of Support Needed",
-                calc_exist_ci: "Existing Critical Illness",
+                calc_exist_ci: "Existing Critical Illness Protection",
                 calc_ci_years: "CI Income Support Needed",
                 calc_exist_med: "Existing Annual Med Limit",
-                calc_target_med: "Target Med Limit (Base)",
+                calc_target_med: "Target Med Limit",
                 calc_inflation: "Annual Inflation Rate",
                 calc_years: "Years",
                 calc_btn: "Calculate Current Needs",
@@ -679,10 +684,9 @@
                 calc_shortfall: "Shortfall: ",
                 calc_covered: "Fully Covered",
                 calc_disclaimer: "* This estimate has been adjusted for inflation factors as a basic financial reference.",
-                btn_pdf: "Generate & Preview PDF Report",
+                btn_pdf: "Generate PDF Report",
                 btn_print: "Print / Save PDF",
                 btn_close: "Close",
-                modal_hint: "A4 Report Preview",
                 
                 pdf_title: "PROTECTION NEEDS REPORT",
                 pdf_date: "Date: ",
@@ -917,7 +921,7 @@
             document.getElementById('repCIReqTbl').innerText = formatCurrency(ciRequired);
             
             let gCI = document.getElementById('repCIGapTbl');
-            if(ciGap > 0) { gCI.innerText = formatCurrency(gap = ciGap); gCI.style.color = '#D9000D'; }
+            if(ciGap > 0) { gCI.innerText = formatCurrency(ciGap); gCI.style.color = '#D9000D'; }
             else { gCI.innerText = translations[currentLang].calc_covered; gCI.style.color = '#008183'; }
 
             document.getElementById('repMedExist').innerText = formatCurrency(existingMedical);
@@ -950,49 +954,56 @@
                 statusBanner.style.borderColor = "#fca5a5";
             }
 
-            // Draw Chart inside Modal
-            const ctx = document.getElementById('protectionChart').getContext('2d');
-            if (reportChartInstance) { reportChartInstance.destroy(); }
-            
-            reportChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [translations[currentLang].pdf_td1, translations[currentLang].pdf_td2, translations[currentLang].pdf_td3],
-                    datasets: [
-                        {
-                            label: translations[currentLang].chart_ext,
-                            data: [existingLife, existingCI, existingMedical],
-                            backgroundColor: '#008183',
-                            borderRadius: 4
-                        },
-                        {
-                            label: translations[currentLang].chart_req,
-                            data: [lifeRequired, ciRequired, medicalRequired],
-                            backgroundColor: '#D9000D',
-                            borderRadius: 4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { font: { family: 'Poppins', size: 10 } } }
+            // Draw Chart inside Modal with slight timeout to ensure visibility
+            setTimeout(() => {
+                const ctx = document.getElementById('protectionChart').getContext('2d');
+                if (reportChartInstance) { reportChartInstance.destroy(); }
+                
+                reportChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [translations[currentLang].pdf_td1, translations[currentLang].pdf_td2, translations[currentLang].pdf_td3],
+                        datasets: [
+                            {
+                                label: translations[currentLang].chart_ext,
+                                data: [existingLife, existingCI, existingMedical],
+                                backgroundColor: '#008183',
+                                borderRadius: 4
+                            },
+                            {
+                                label: translations[currentLang].chart_req,
+                                data: [lifeRequired, ciRequired, medicalRequired],
+                                backgroundColor: '#D9000D',
+                                borderRadius: 4
+                            }
+                        ]
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    if(value >= 1000000) return (value / 1000000) + 'M';
-                                    if(value >= 1000) return (value / 1000) + 'K';
-                                    return value;
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { font: { family: 'Poppins', size: 9 } } }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    font: { size: 9 },
+                                    callback: function(value) {
+                                        if(value >= 1000000) return (value / 1000000) + 'M';
+                                        if(value >= 1000) return (value / 1000) + 'K';
+                                        return value;
+                                    }
                                 }
+                            },
+                            x: {
+                                ticks: { font: { size: 9 } }
                             }
                         }
                     }
-                }
-            });
+                });
+            }, 100);
         });
 
         // Open Report Modal
