@@ -8,9 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <!-- Libraries for PDF Generation and Charting -->
+    <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         :root {
@@ -157,11 +156,27 @@
         }
         .infotip-box.show { display: block; }
 
-        /* Print Container (Hidden from Screen) */
-        #pdf-wrapper { position: absolute; left: -9999px; top: 0; z-index: -100; }
-        #pdf-report { 
-            width: 800px; background: #ffffff; color: #1e293b; padding: 50px; 
-            font-family: Helvetica, Arial, sans-serif; box-sizing: border-box; 
+        /* PDF Report Container (Hidden on normal screen view) */
+        #pdf-report { display: none; }
+
+        /* ========================================== */
+        /* PRINT / PDF GENERATION RULES               */
+        /* ========================================== */
+        @media print {
+            body * { visibility: hidden; }
+            #pdf-report, #pdf-report * { visibility: visible; }
+            #pdf-report { 
+                display: block !important; 
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                width: 100%; 
+                background: #ffffff !important; 
+                color: #1e293b !important; 
+                padding: 20mm; 
+                box-sizing: border-box;
+            }
+            @page { size: A4 portrait; margin: 0; }
         }
     </style>
 </head>
@@ -459,84 +474,82 @@
 
     </main>
 
-    <!-- Halaman PDF Tersembunyi (Hidden PDF Template) -->
-    <div id="pdf-wrapper">
-        <div id="pdf-report">
-            <div style="border-bottom: 3px solid #D9000D; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
-                <div>
-                    <h1 style="font-size: 24px; font-weight: 800; color: #D9000D; margin: 0; text-transform: uppercase;" id="pdfTitle">Laporan Keperluan Perlindungan</h1>
-                    <p style="margin: 5px 0 0 0; color: #64748b; font-size: 13px;" id="pdfDate"></p>
-                </div>
-                <div style="text-align: right;">
-                    <h2 style="font-size: 16px; font-weight: 700; margin: 0; color: #1e293b;">TAKAFUL SERVICES</h2>
-                    <p style="margin: 0; color: #64748b; font-size: 11px;">oleh Fairuz Samsuddin</p>
-                </div>
+    <!-- Halaman PDF Tersembunyi (A4 Professional Template) -->
+    <div id="pdf-report">
+        <div style="border-bottom: 3px solid #D9000D; padding-bottom: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <h1 style="font-size: 22px; font-weight: 800; color: #D9000D; margin: 0; text-transform: uppercase;" id="pdfTitle">Laporan Keperluan Perlindungan</h1>
+                <p style="margin: 5px 0 0 0; color: #64748b; font-size: 12px;" id="pdfDate"></p>
             </div>
-
-            <!-- Status Banner -->
-            <div id="reportStatusBanner" style="padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center; font-weight: bold; font-size: 15px; background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5;">
-                STATUS PERLINDUNGAN: PERLU DITAMBAHBAIK
+            <div style="text-align: right;">
+                <h2 style="font-size: 15px; font-weight: 700; margin: 0; color: #1e293b;">TAKAFUL SERVICES</h2>
+                <p style="margin: 0; color: #64748b; font-size: 11px;">oleh Fairuz Samsuddin</p>
             </div>
-
-            <!-- Inputs Summary -->
-            <div style="display: flex; justify-content: space-between; margin-bottom: 30px;">
-                <div style="width: 48%;">
-                    <h3 style="font-size: 13px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 10px;" id="pdfSub1">Maklumat Kewangan</h3>
-                    <p style="font-size: 12px; display: flex; justify-content: space-between; margin: 6px 0;"><span id="pdfIncL">Pendapatan Bulanan:</span> <strong id="repIncome">RM 0</strong></p>
-                    <p style="font-size: 12px; display: flex; justify-content: space-between; margin: 6px 0;"><span id="pdfExpL">Perbelanjaan Bulanan:</span> <strong id="repExpense">RM 0</strong></p>
-                    <p style="font-size: 12px; display: flex; justify-content: space-between; margin: 6px 0;"><span id="pdfDebtL">Hutang Tertunggak:</span> <strong id="repDebt">RM 0</strong></p>
-                    <p style="font-size: 12px; display: flex; justify-content: space-between; margin: 6px 0;"><span id="pdfInfL">Kadar Inflasi Diambil Kira:</span> <strong id="repInflation">3%</strong></p>
-                </div>
-                <div style="width: 48%;">
-                    <h3 style="font-size: 13px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 10px;" id="pdfSub2">Parameter Perlindungan</h3>
-                    <p style="font-size: 12px; display: flex; justify-content: space-between; margin: 6px 0;"><span id="pdfLifeYL">Tahun Sokongan Hayat:</span> <strong id="repLifeYears">10 Tahun</strong></p>
-                    <p style="font-size: 12px; display: flex; justify-content: space-between; margin: 6px 0;"><span id="pdfCIYL">Tahun Sokongan CI:</span> <strong id="repCIYears">3 Tahun</strong></p>
-                </div>
-            </div>
-
-            <!-- Table Comparison -->
-            <h3 style="font-size: 13px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 15px;" id="pdfSub3">Ringkasan Keperluan vs Sedia Ada</h3>
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 35px; font-size: 12px;">
-                <thead>
-                    <tr style="background: #f1f5f9;">
-                        <th style="padding: 10px; border: 1px solid #cbd5e1; text-align: left; color: #0f172a;" id="pdfTh1">Kategori</th>
-                        <th style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh2">Sedia Ada (RM)</th>
-                        <th style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh3">Sasaran Keperluan (RM)</th>
-                        <th style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh4">Kekurangan / Gap (RM)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="padding: 10px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd1">Hayat / Hibah</td>
-                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeExist">0</td>
-                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeReqTbl">0</td>
-                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repLifeGapTbl">0</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 10px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd2">Sakit Kritikal</td>
-                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIExist">0</td>
-                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIReqTbl">0</td>
-                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repCIGapTbl">0</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 10px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd3">Had Perubatan</td>
-                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedExist">0</td>
-                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedReqTbl">0</td>
-                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repMedGapTbl">0</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- Chart -->
-            <h3 style="font-size: 13px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 15px;" id="pdfSub4">Graf Analisis Perlindungan</h3>
-            <div style="height: 250px; width: 100%; display: flex; justify-content: center;">
-                <canvas id="protectionChart"></canvas>
-            </div>
-            
-            <p style="font-size: 10px; color: #94a3b8; text-align: center; margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 15px;" id="pdfFooter">
-                * Laporan ini dijana melalui Kalkulator Keperluan Perlindungan dan berfungsi sebagai rujukan kewangan asas. Sila dapatkan nasihat terperinci daripada Perunding Takaful bertauliah.
-            </p>
         </div>
+
+        <!-- Status Banner -->
+        <div id="reportStatusBanner" style="padding: 12px; border-radius: 6px; margin-bottom: 20px; text-align: center; font-weight: bold; font-size: 14px; background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5;">
+            STATUS PERLINDUNGAN: PERLU DITAMBAHBAIK
+        </div>
+
+        <!-- Inputs Summary -->
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <div style="width: 48%;">
+                <h3 style="font-size: 12px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 8px;" id="pdfSub1">Maklumat Kewangan</h3>
+                <p style="font-size: 11px; display: flex; justify-content: space-between; margin: 4px 0;"><span id="pdfIncL">Pendapatan Bulanan:</span> <strong id="repIncome">RM 0</strong></p>
+                <p style="font-size: 11px; display: flex; justify-content: space-between; margin: 4px 0;"><span id="pdfExpL">Perbelanjaan Bulanan:</span> <strong id="repExpense">RM 0</strong></p>
+                <p style="font-size: 11px; display: flex; justify-content: space-between; margin: 4px 0;"><span id="pdfDebtL">Hutang Tertunggak:</span> <strong id="repDebt">RM 0</strong></p>
+                <p style="font-size: 11px; display: flex; justify-content: space-between; margin: 4px 0;"><span id="pdfInfL">Kadar Inflasi:</span> <strong id="repInflation">3%</strong></p>
+            </div>
+            <div style="width: 48%;">
+                <h3 style="font-size: 12px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 8px;" id="pdfSub2">Parameter Perlindungan</h3>
+                <p style="font-size: 11px; display: flex; justify-content: space-between; margin: 4px 0;"><span id="pdfLifeYL">Tahun Sokongan Hayat:</span> <strong id="repLifeYears">10 Tahun</strong></p>
+                <p style="font-size: 11px; display: flex; justify-content: space-between; margin: 4px 0;"><span id="pdfCIYL">Tahun Sokongan CI:</span> <strong id="repCIYears">3 Tahun</strong></p>
+            </div>
+        </div>
+
+        <!-- Table Comparison -->
+        <h3 style="font-size: 12px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 10px;" id="pdfSub3">Ringkasan Keperluan vs Sedia Ada</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 11px;">
+            <thead>
+                <tr style="background: #f1f5f9;">
+                    <th style="padding: 8px; border: 1px solid #cbd5e1; text-align: left; color: #0f172a;" id="pdfTh1">Kategori</th>
+                    <th style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh2">Sedia Ada (RM)</th>
+                    <th style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh3">Sasaran Keperluan (RM)</th>
+                    <th style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh4">Kekurangan / Gap (RM)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd1">Hayat / Hibah</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeExist">0</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeReqTbl">0</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repLifeGapTbl">0</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd2">Sakit Kritikal</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIExist">0</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIReqTbl">0</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repCIGapTbl">0</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd3">Had Perubatan</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedExist">0</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedReqTbl">0</td>
+                    <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repMedGapTbl">0</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Chart -->
+        <h3 style="font-size: 12px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 10px;" id="pdfSub4">Graf Analisis Perlindungan</h3>
+        <div style="height: 200px; width: 100%; display: flex; justify-content: center;">
+            <canvas id="protectionChart"></canvas>
+        </div>
+        
+        <p style="font-size: 10px; color: #94a3b8; text-align: center; margin-top: 25px; border-top: 1px solid #e2e8f0; padding-top: 10px;" id="pdfFooter">
+            * Laporan ini dijana melalui Kalkulator Keperluan Perlindungan dan berfungsi sebagai rujukan kewangan asas. Sila dapatkan nasihat terperinci daripada Perunding Takaful bertauliah.
+        </p>
     </div>
 
     <script>
@@ -566,7 +579,6 @@
                 anim_title: "Kalkulator Perlindungan",
                 brand_title: "TAKAFUL SERVICES",
                 brand_sub: "by Fairuz Samsuddin",
-                
                 calc_title: "Kalkulator Keperluan Perlindungan",
                 calc_subtitle: "Kira anggaran keperluan kewangan untuk diri & keluarga, mengambil kira kadar inflasi semasa.",
                 calc_error: "Nota: Perbelanjaan bulanan anda melebihi pendapatan bulanan. Sila semak semula.",
@@ -591,7 +603,6 @@
                 calc_disclaimer: "* Anggaran ini telah diselaraskan dengan faktor inflasi sebagai rujukan asas kewangan anda.",
                 btn_pdf: "Muat Turun Laporan PDF",
                 
-                // PDF Text
                 pdf_title: "LAPORAN KEPERLUAN PERLINDUNGAN",
                 pdf_date: "Tarikh: ",
                 pdf_sub1: "Maklumat Kewangan",
@@ -612,14 +623,14 @@
                 chart_req: "Keperluan",
                 chart_ext: "Sedia Ada",
 
-                tip_income: "<strong>📝 Isikan:</strong> Gaji bersih bulanan, hasil sewa, & pendapatan lain.<br><br><strong>💡 Sebab:</strong> Sebagai asas kiraan jumlah penggantian pendapatan keluarga anda.",
-                tip_expenses: "<strong>📝 Isikan:</strong> Jumlah komitmen & perbelanjaan tetap.<br><br><strong>💡 Sebab:</strong> Semakan kelayakan aliran tunai.",
-                tip_debt: "<strong>📝 Isikan:</strong> Baki terkini hutang sedia ada.<br><br><strong>💡 Sebab:</strong> Waris tidak patut diwariskan hutang.",
-                tip_exist_life: "<strong>📝 Isikan:</strong> Jumlah pampasan nyawa dari polisi sedia ada.<br><br><strong>💡 Sebab:</strong> Akan ditolak dari sasaran untuk mencari gap.",
-                tip_life_years: "<strong>📝 Isikan:</strong> Tempoh masa sasaran tanggungan (cadangan: 10–20 tahun).<br><br><strong>💡 Sebab:</strong> Tempoh sokongan kewangan keluarga meneruskan kehidupan.",
-                tip_inflation: "<strong>📝 Isikan:</strong> Kadar inflasi kos sara hidup.<br><br><strong>💡 Sebab:</strong> Membantu unjuran masa hadapan menjadi lebih tepat.",
-                tip_exist_ci: "<strong>📝 Isikan:</strong> Pampasan CI sedia ada.<br><br><strong>💡 Sebab:</strong> Penyakit kritikal menghentikan keupayaan pesakit untuk bekerja.",
-                tip_ci_years: "<strong>📝 Isikan:</strong> Tempoh rehat bekerja (Cadangan: 3 - 5 tahun).<br><br><strong>💡 Sebab:</strong> Penggantian pendapatan fasa rawatan panjang.",
+                tip_income: "<strong>📝 Isikan:</strong> Gaji bersih bulanan, hasil sewa, & pendapatan lain.",
+                tip_expenses: "<strong>📝 Isikan:</strong> Jumlah komitmen & perbelanjaan tetap.",
+                tip_debt: "<strong>📝 Isikan:</strong> Baki terkini hutang sedia ada.",
+                tip_exist_life: "<strong>📝 Isikan:</strong> Jumlah pampasan nyawa dari polisi sedia ada.",
+                tip_life_years: "<strong>📝 Isikan:</strong> Tempoh masa sasaran tanggungan (cadangan: 10–20 tahun).",
+                tip_inflation: "<strong>📝 Isikan:</strong> Kadar inflasi kos sara hidup.",
+                tip_exist_ci: "<strong>📝 Isikan:</strong> Pampasan CI sedia ada.",
+                tip_ci_years: "<strong>📝 Isikan:</strong> Tempoh rehat bekerja (Cadangan: 3 - 5 tahun).",
                 tip_exist_med: "<strong>📝 Isikan:</strong> Had tahunan kad perubatan sedia ada.",
                 tip_target_med: "<strong>📝 Isikan:</strong> Had bil hospital tahunan diinginkan (Cth: RM200,000)."
             },
@@ -651,7 +662,6 @@
                 calc_disclaimer: "* This estimate has been adjusted for inflation factors as a basic financial reference.",
                 btn_pdf: "Download PDF Report",
                 
-                // PDF Text
                 pdf_title: "PROTECTION NEEDS REPORT",
                 pdf_date: "Date: ",
                 pdf_sub1: "Financial Information",
@@ -841,10 +851,8 @@
             }
 
             // ==========================================
-            // UPDATE HIDDEN PDF REPORT DATA
+            // UPDATE REPORT DATA
             // ==========================================
-            
-            // Text Translations for PDF
             const d = new Date();
             const dateString = d.toLocaleDateString(currentLang === 'ms' ? 'ms-MY' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
             document.getElementById('pdfDate').innerText = translations[currentLang].pdf_date + dateString;
@@ -869,7 +877,6 @@
             document.getElementById('pdfLifeYL').innerText = translations[currentLang].calc_life_years + ":";
             document.getElementById('pdfCIYL').innerText = translations[currentLang].calc_ci_years + ":";
 
-            // Values
             document.getElementById('repIncome').innerText = formatCurrency(income);
             document.getElementById('repExpense').innerText = formatCurrency(expenses);
             document.getElementById('repDebt').innerText = formatCurrency(debt);
@@ -877,7 +884,6 @@
             document.getElementById('repLifeYears').innerText = lifeYears + " " + translations[currentLang].calc_years;
             document.getElementById('repCIYears').innerText = ciYears + " " + translations[currentLang].calc_years;
 
-            // Table Data
             document.getElementById('repLifeExist').innerText = formatCurrency(existingLife);
             document.getElementById('repLifeReqTbl').innerText = formatCurrency(lifeRequired);
             
@@ -899,7 +905,6 @@
             if(medicalGap > 0) { gMed.innerText = formatCurrency(medicalGap); gMed.style.color = '#D9000D'; }
             else { gMed.innerText = translations[currentLang].calc_covered; gMed.style.color = '#008183'; }
 
-            // Determine Status Logic
             let gapCount = 0;
             if(lifeGap > 0) gapCount++;
             if(ciGap > 0) gapCount++;
@@ -923,7 +928,7 @@
                 statusBanner.style.borderColor = "#fca5a5";
             }
 
-            // Draw Chart for PDF
+            // Draw Chart
             const ctx = document.getElementById('protectionChart').getContext('2d');
             if (reportChartInstance) { reportChartInstance.destroy(); }
             
@@ -949,9 +954,9 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    animation: false, // Turn off animation so html2pdf captures it instantly
+                    animation: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { font: { family: 'Helvetica', size: 12 } } }
+                        legend: { position: 'bottom', labels: { font: { family: 'Poppins', size: 11 } } }
                     },
                     scales: {
                         y: {
@@ -961,47 +966,21 @@
                                     if(value >= 1000000) return (value / 1000000) + 'M';
                                     if(value >= 1000) return (value / 1000) + 'K';
                                     return value;
-                                },
-                                font: { family: 'Helvetica' }
+                                }
                             }
-                        },
-                        x: { ticks: { font: { family: 'Helvetica', size: 12 } } }
+                        }
                     }
                 }
             });
         });
 
-        // Generate PDF Click Event
+        // Trigger PDF Print / Save Dialog
         document.getElementById('btnGeneratePDF').addEventListener('click', function() {
-            // Re-trigger submit to ensure all latest values and translations are updated right before printing
             document.getElementById('needsCalculatorForm').dispatchEvent(new Event('submit', { cancelable: false, bubbles: false }));
-            
-            const element = document.getElementById('pdf-report');
-            
-            const opt = {
-                margin:       0,
-                filename:     currentLang === 'ms' ? 'Laporan_Keperluan_Perlindungan.pdf' : 'Protection_Needs_Report.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-            };
-
-            // Change button text to indicate loading
-            const originalBtnHtml = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
-            this.disabled = true;
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                this.innerHTML = originalBtnHtml;
-                this.disabled = false;
-            }).catch(err => {
-                console.error("PDF Generation Error", err);
-                this.innerHTML = originalBtnHtml;
-                this.disabled = false;
-                alert("Ralat semasa menjana PDF. Sila cuba lagi.");
-            });
+            setTimeout(() => {
+                window.print();
+            }, 300);
         });
-
     </script>
 </body>
 </html>
