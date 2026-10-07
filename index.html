@@ -7,351 +7,378 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <!-- Script Tailwind diletakkan di atas supaya dimuatkan lebih awal -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'media',
-        theme: {
-          extend: {
-            fontFamily: { sans: ['Poppins', 'sans-serif'] },
-            colors: {
-              primary: { DEFAULT: '#D9000D', hover: '#ff1e2d', glow: 'rgba(217,0,13,0.4)' },
-              teal: { DEFAULT: '#008183', hover: '#00b5b8', glow: 'rgba(0,129,131,0.4)' },
-            },
-            backgroundImage: {
-              'ambient-glow-light': 'radial-gradient(circle at 50% 0%, rgba(217,0,13,0.05) 0%, transparent 60%), radial-gradient(circle at 80% 80%, rgba(0,129,131,0.05) 0%, transparent 50%)',
-              'ambient-glow-dark': 'radial-gradient(circle at 50% 0%, rgba(217,0,13,0.15) 0%, transparent 60%), radial-gradient(circle at 80% 80%, rgba(0,129,131,0.1) 0%, transparent 50%)',
-            },
-            animation: {
-              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
-              'float': 'float 6s ease-in-out infinite',
-            },
-            keyframes: {
-              fadeInUp: {
-                '0%': { opacity: '0', transform: 'translateY(20px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-              float: {
-                '0%, 100%': { transform: 'translateY(0px)' },
-                '50%': { transform: 'translateY(-10px)' },
-              }
-            }
-          }
+
+    <style>
+        :root {
+            --primary: #D9000D;
+            --primary-hover: #ff1e2d;
+            --teal: #008183;
+            --teal-hover: #00b5b8;
         }
-      }
-    </script>
-    
-    <style type="text/tailwindcss">
-      @layer components {
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        
         html { scroll-behavior: smooth; }
-        body { overflow-x: hidden; width: 100%; max-width: 100vw; box-sizing: border-box; }
+        body { 
+            overflow-x: hidden; 
+            width: 100%; 
+            max-width: 100vw; 
+            background-color: #09090b; 
+            color: #f4f4f5; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column;
+            background-image: radial-gradient(circle at 50% 0%, rgba(217,0,13,0.15) 0%, transparent 60%), radial-gradient(circle at 80% 80%, rgba(0,129,131,0.1) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
         .scrollbar-none::-webkit-scrollbar { display: none; }
         .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Glassmorphism & Core UI Utilities */
-        .glass-nav { @apply bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl border-b border-slate-200 dark:border-white/5 shadow-sm dark:shadow-[0_4px_30px_rgba(0,0,0,0.5)]; }
-        .glass-card { @apply bg-white/80 dark:bg-zinc-900/60 backdrop-blur-lg border border-slate-200 dark:border-white/10 shadow-xl dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-300; }
-        .glass-input-container { @apply bg-slate-50/60 dark:bg-black/40 backdrop-blur-md border border-slate-200 dark:border-white/5 rounded-2xl p-6 md:p-10; }
+        /* Glassmorphism Components */
+        .glass-nav { 
+            background: rgba(9, 9, 11, 0.75); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
+            box-shadow: 0 4px 30px rgba(0,0,0,0.5); 
+        }
+        .glass-card { 
+            background: rgba(24, 24, 27, 0.6); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3); 
+            transition: all 0.3s ease; 
+        }
+        .glass-input-container { 
+            background: rgba(0, 0, 0, 0.4); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            border-radius: 1rem; 
+            padding: 1.5rem; 
+        }
+        @media(min-width: 768px) { .glass-input-container { padding: 2.5rem; } }
         
-        /* Forms */
-        .form-input { @apply block w-full px-4 py-3 h-12 rounded-xl bg-white dark:bg-zinc-950 border border-slate-300 dark:border-zinc-800 text-slate-800 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary focus:bg-slate-50 dark:focus:bg-black transition-all shadow-inner dark:shadow-none; }
-        .form-label { @apply text-xs font-semibold text-slate-500 dark:text-zinc-400 mb-2 flex items-center tracking-wider uppercase; }
+        /* Form Inputs */
+        .form-input { 
+            display: block; width: 100%; padding: 0.75rem 1rem; height: 3rem; 
+            border-radius: 0.75rem; background: #09090b; 
+            border: 1px solid #27272a; color: #f4f4f5; 
+            outline: none; transition: all 0.3s; font-size: 0.95rem;
+        }
+        .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(217,0,13,0.3); }
+        .form-label { font-size: 0.75rem; font-weight: 600; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; letter-spacing: 0.05em; text-transform: uppercase; }
         
         /* Buttons */
-        .btn-primary { @apply relative overflow-hidden inline-flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer transition-all duration-300 bg-primary text-white hover:bg-primary-hover min-h-[3.5rem] rounded-full px-8 text-sm md:text-base font-semibold shadow-[0_4px_15px_rgba(217,0,13,0.3)] hover:shadow-[0_6px_25px_rgba(217,0,13,0.5)] hover:-translate-y-1; }
-        .btn-teal { @apply bg-teal border border-teal-hover hover:bg-teal-hover shadow-md dark:shadow-[0_4px_15px_rgba(0,129,131,0.3)] dark:hover:shadow-[0_6px_25px_rgba(0,129,131,0.6)]; }
+        .btn-primary { 
+            position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; 
+            cursor: pointer; transition: all 0.3s ease; background: var(--primary); color: white; 
+            min-h: 3.5rem; border-radius: 9999px; padding: 0 2rem; font-size: 1rem; font-weight: 600; 
+            box-shadow: 0 4px 15px rgba(217,0,13,0.3); border: none; width: 100%;
+        }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 25px rgba(217,0,13,0.5); }
+        .btn-teal { background: var(--teal); box-shadow: 0 4px 15px rgba(0,129,131,0.3); }
+        .btn-teal:hover { background: var(--teal-hover); box-shadow: 0 6px 25px rgba(0,129,131,0.5); }
         
-        /* Animations & Interactions */
-        .reveal { @apply opacity-0 translate-y-12 transition-all duration-1000 ease-[cubic-bezier(0.25,0.1,0.25,1)]; }
-        .reveal.active { @apply opacity-100 translate-y-0; }
-        .animation-delay-300 { animation-delay: 300ms; }
-        .animation-delay-600 { animation-delay: 600ms; }
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        .animate-float { animation: float 6s ease-in-out infinite; }
         
         /* Result Cards */
-        .result-card { @apply glass-card rounded-2xl p-8 text-center hover:border-primary group transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_35px_rgba(217,0,13,0.15)] dark:hover:shadow-[0_15px_35px_rgba(217,0,13,0.25)]; }
-        .result-icon { @apply w-14 h-14 mx-auto rounded-full bg-primary/10 text-primary flex items-center justify-center text-2xl mb-4 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-inner; }
-        .result-icon-teal { @apply bg-teal/10 text-teal group-hover:bg-teal group-hover:text-white; }
-        .result-title { @apply text-[11px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider mb-2 transition-colors duration-500; }
-        .result-amount { @apply text-3xl md:text-4xl font-black text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] transition-colors duration-500; }
+        .result-card { background: rgba(24, 24, 27, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1rem; padding: 2rem; text-align: center; transition: all 0.5s; }
+        .result-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(217,0,13,0.2); }
+        .result-icon { width: 3.5rem; height: 3.5rem; margin: 0 auto 1rem auto; border-radius: 50%; background: rgba(217,0,13,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .result-icon-teal { background: rgba(0,129,131,0.1); color: var(--teal); }
+        .result-title { font-size: 0.7rem; font-weight: 700; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+        .result-amount { font-size: 2rem; font-weight: 800; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
         
-        /* Infotip Container - Telah dibuang apply 'hidden' supaya toggle berfungsi */
-        .infotip-box { @apply absolute bottom-full left-1/2 z-50 mb-3 w-[260px] md:w-[320px] -translate-x-1/2 rounded-xl bg-slate-800 dark:bg-zinc-900 border border-slate-700 dark:border-white/10 px-5 py-4 text-left text-xs leading-relaxed text-white shadow-xl normal-case tracking-normal; }
-      }
+        /* Infotip Container */
+        .infotip-box { 
+            display: none; position: absolute; bottom: 100%; left: 50%; z-index: 50; margin-bottom: 0.75rem; 
+            width: 280px; transform: translateX(-50%); border-radius: 0.75rem; background: #18181b; 
+            border: 1px solid rgba(255, 255, 255, 0.15); padding: 1rem; text-align: left; font-size: 0.75rem; 
+            line-height: 1.5; color: #f4f4f5; box-shadow: 0 10px 25px rgba(0,0,0,0.8); text-transform: none; font-weight: normal; 
+        }
+        .infotip-box::after {
+            content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+            border-width: 5px; border-style: solid; border-color: #18181b transparent transparent transparent;
+        }
+        .infotip-box.show { display: block; }
     </style>
 </head>
 
-<body class="bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 antialiased min-h-screen flex flex-col bg-ambient-glow-light dark:bg-ambient-glow-dark bg-fixed relative transition-colors duration-500">
+<body>
 
     <!-- Opening Animation Sequence -->
-    <div id="opening-sequence" class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950 transition-opacity duration-1000">
-        <div class="relative flex flex-col items-center">
-            <div class="absolute w-40 h-40 bg-primary/20 rounded-full blur-[50px] animate-pulse"></div>
-            <div class="absolute w-40 h-40 bg-teal/20 rounded-full blur-[50px] animate-pulse delay-700 transform translate-x-12 -translate-y-12"></div>
-            <i class="fas fa-shield-halved text-5xl text-white z-10 mb-6 opacity-0 animate-fade-in-up drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]"></i>
-            <h1 class="text-xl md:text-2xl font-black text-white tracking-[0.2em] uppercase z-10 opacity-0 animate-fade-in-up animation-delay-300" data-translate="anim_title">Kalkulator Perlindungan</h1>
-            <div class="h-1 w-24 bg-gradient-to-r from-transparent via-teal to-transparent mt-4 opacity-0 animate-fade-in-up animation-delay-600 rounded-full"></div>
+    <div id="opening-sequence" style="position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background: #09090b; transition: opacity 1s ease;">
+        <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: absolute; width: 10rem; height: 10rem; background: rgba(217,0,13,0.2); border-radius: 50%; filter: blur(40px);"></div>
+            <i class="fas fa-shield-halved" style="font-size: 3rem; color: white; z-index: 10; margin-bottom: 1.5rem; opacity: 0; animation: fadeInUp 0.8s ease-out forwards; text-shadow: 0 0 15px rgba(255,255,255,0.3);"></i>
+            <h1 class="animate-fade-in-up" style="font-size: 1.25rem; font-weight: 800; color: white; letter-spacing: 0.2em; text-transform: uppercase; z-index: 10; opacity: 0; animation-delay: 300ms;" data-translate="anim_title">Kalkulator Perlindungan</h1>
+            <div style="height: 4px; width: 6rem; background: linear-gradient(to right, transparent, var(--teal), transparent); margin-top: 1rem; border-radius: 9999px; opacity: 0; animation: fadeInUp 0.8s ease-out forwards; animation-delay: 600ms;"></div>
         </div>
     </div>
 
     <!-- Navigation Bar -->
-    <nav class="sticky top-0 z-50 glass-nav w-full transition-colors duration-500">
-        <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 gap-5 w-full">
-            <div class="flex items-center gap-3 shrink-0 group cursor-pointer">
-                <div class="flex flex-col">
-                    <span class="text-[15px] font-black uppercase tracking-tight text-primary leading-none dark:drop-shadow-[0_0_5px_rgba(217,0,13,0.3)]" data-translate="brand_title">TAKAFUL SERVICES</span>
-                    <span class="mt-1 text-[11px] font-medium text-slate-500 dark:text-zinc-400 leading-none" data-translate="brand_sub">by Fairuz Samsuddin</span>
+    <nav class="glass-nav" style="position: sticky; top: 0; z-index: 50; width: 100%;">
+        <div style="max-width: 64rem; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 1rem; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: -0.025em; color: var(--primary);" data-translate="brand_title">TAKAFUL SERVICES</span>
+                    <span style="margin-top: 0.25rem; font-size: 0.7rem; font-weight: 500; color: #a1a1aa;" data-translate="brand_sub">by Fairuz Samsuddin</span>
                 </div>
             </div>
             
-            <div class="ml-auto flex items-center gap-3 shrink-0">
-                <button type="button" onclick="toggleLanguage()" id="langBtn" class="flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-white/10 bg-white dark:bg-zinc-900 px-4 py-2 text-xs font-bold text-slate-700 dark:text-zinc-100 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-white/10 dark:hover:border-white/20">
-                    <i class="fas fa-globe text-teal dark:drop-shadow-[0_0_3px_rgba(0,129,131,0.8)]"></i> <span id="langText">EN</span>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <button type="button" onclick="toggleLanguage()" id="langBtn" style="display: flex; align-items: center; gap: 0.5rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.1); background: #18181b; padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 700; color: #f4f4f5; cursor: pointer; transition: background 0.2s;">
+                    <i class="fas fa-globe" style="color: var(--teal);"></i> <span id="langText">EN</span>
                 </button>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-12 box-border relative z-10">
+    <main style="flex-grow: 1; max-width: 64rem; margin: 0 auto; width: 100%; padding: 3rem 1rem; position: relative; z-index: 10;">
 
         <!-- Calculator Section -->
-        <section id="kalkulator-keperluan" class="glass-card rounded-[2.5rem] overflow-visible reveal border border-slate-200 dark:border-white/10 shadow-2xl transition-colors duration-500">
+        <section id="kalkulator-keperluan" class="glass-card reveal" style="border-radius: 2.5rem; overflow: visible; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);">
             
-            <div class="relative overflow-hidden rounded-t-[2.5rem] p-10 md:p-12 text-center border-b border-slate-200 dark:border-white/5">
-                <div class="absolute inset-0 bg-gradient-to-r from-teal/10 via-slate-100 to-primary/10 dark:from-teal/20 dark:via-zinc-900 dark:to-primary/20 opacity-90 dark:opacity-50 transition-colors duration-500"></div>
-                <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-teal to-transparent opacity-50"></div>
+            <div style="position: relative; overflow: hidden; border-top-left-radius: 2.5rem; border-top-right-radius: 2.5rem; padding: 2.5rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 0%, rgba(0,129,131,0.2) 0%, transparent 70%); opacity: 0.6;"></div>
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(to right, transparent, var(--teal), transparent);"></div>
                 
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white dark:bg-zinc-950 border border-slate-200 dark:border-white/10 shadow-lg mb-6 relative z-10 animate-float">
-                    <i class="fas fa-calculator text-2xl text-teal"></i>
+                <div class="animate-float" style="display: inline-flex; align-items: center; justify-content: center; width: 4rem; height: 4rem; border-radius: 50%; background: #09090b; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.5rem; position: relative; z-index: 10;">
+                    <i class="fas fa-calculator" style="font-size: 1.25rem; color: var(--teal);"></i>
                 </div>
                 
-                <h3 class="relative z-10 text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-3 drop-shadow-sm transition-colors duration-500" data-translate="calc_title">Kalkulator Keperluan Perlindungan</h3>
-                <p class="relative z-10 text-sm md:text-base text-slate-600 dark:text-zinc-400 font-medium max-w-2xl mx-auto transition-colors duration-500" data-translate="calc_subtitle">Kira anggaran keperluan kewangan untuk diri & keluarga, mengambil kira kadar inflasi semasa.</p>
+                <h3 style="position: relative; z-index: 10; font-size: 1.75rem; font-weight: 900; color: #ffffff; letter-spacing: -0.025em; margin-bottom: 0.75rem;" data-translate="calc_title">Kalkulator Keperluan Perlindungan</h3>
+                <p style="position: relative; z-index: 10; font-size: 0.9rem; color: #a1a1aa; font-weight: 500; max-width: 36rem; margin: 0 auto;" data-translate="calc_subtitle">Kira anggaran keperluan kewangan untuk diri & keluarga, mengambil kira kadar inflasi semasa.</p>
             </div>
             
-            <div class="p-6 md:p-12 bg-slate-50/40 dark:bg-zinc-950/40 transition-colors duration-500">
-                <div id="errorAlert" class="hidden mb-8 p-4 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 rounded-xl text-sm font-semibold shadow-sm dark:shadow-[0_0_15px_rgba(217,0,13,0.1)] backdrop-blur-sm transition-colors duration-500" data-translate="calc_error">Nota: Perbelanjaan bulanan anda melebihi pendapatan bulanan. Sila semak semula.</div>
+            <div style="padding: 2rem; background: rgba(0,0,0,0.3);">
+                <div id="errorAlert" style="display: none; margin-bottom: 2rem; padding: 1rem; background: rgba(127, 29, 29, 0.3); color: #f87171; border: 1px solid rgba(153, 27, 27, 0.5); border-radius: 0.75rem; font-size: 0.85rem; font-weight: 600;" data-translate="calc_error">Nota: Perbelanjaan bulanan anda melebihi pendapatan bulanan. Sila semak semula.</div>
 
-                <form id="needsCalculatorForm" class="space-y-8 glass-input-container shadow-xl">
+                <form id="needsCalculatorForm" class="glass-input-container" style="display: flex; flex-direction: column; gap: 2rem;">
                     
                     <!-- Row 1: Income / Expense / Debt -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="group">
-                            <label class="form-label group-focus-within:text-teal transition-colors">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+                        <div style="position: relative;">
+                            <label class="form-label">
                                 <span data-translate="calc_income">Pendapatan Bulanan</span>
-                                <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-income')" class="focus:outline-none">
-                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
+                                <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-income')" style="background:none; border:none; cursor:pointer;">
+                                        <i class="fas fa-info-circle" style="color: #71717a; font-size: 0.9rem;"></i>
                                     </button>
-                                    <div id="tip-income" class="info-tooltip infotip-box hidden">
+                                    <div id="tip-income" class="info-tooltip infotip-box">
                                         <span data-translate="tip_income"><strong>📝 Isikan:</strong> Gaji bersih bulanan, hasil sewa, & pendapatan lain.<br><br><strong>💡 Sebab:</strong> Sebagai asas kiraan jumlah penggantian pendapatan keluarga anda jika berlaku musibah.</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
-                            <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
-                                <input type="text" inputmode="numeric" id="calcIncome" class="calc-currency form-input pl-12" placeholder="0" required>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 1rem; top: 0.85rem; color: #71717a; font-size: 0.85rem; font-weight: 700;">RM</span>
+                                <input type="text" inputmode="numeric" id="calcIncome" class="calc-currency form-input" style="padding-left: 3rem;" placeholder="0" required>
                             </div>
                         </div>
-                        <div class="group">
-                            <label class="form-label group-focus-within:text-teal transition-colors">
+                        <div style="position: relative;">
+                            <label class="form-label">
                                 <span data-translate="calc_expenses">Perbelanjaan Bulanan</span>
-                                <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-expenses')" class="focus:outline-none">
-                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
+                                <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-expenses')" style="background:none; border:none; cursor:pointer;">
+                                        <i class="fas fa-info-circle" style="color: #71717a; font-size: 0.9rem;"></i>
                                     </button>
-                                    <div id="tip-expenses" class="info-tooltip infotip-box hidden">
+                                    <div id="tip-expenses" class="info-tooltip infotip-box">
                                         <span data-translate="tip_expenses"><strong>📝 Isikan:</strong> Jumlah komitmen & perbelanjaan tetap (ansuran, bil, barang dapur, Takaful).<br><br><strong>💡 Sebab:</strong> Untuk memastikan cadangan pelan perlindungan tidak membebankan aliran tunai (semakan kelayakan asas).</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
-                            <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
-                                <input type="text" inputmode="numeric" id="calcExpenses" class="calc-currency form-input pl-12" placeholder="0" required>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 1rem; top: 0.85rem; color: #71717a; font-size: 0.85rem; font-weight: 700;">RM</span>
+                                <input type="text" inputmode="numeric" id="calcExpenses" class="calc-currency form-input" style="padding-left: 3rem;" placeholder="0" required>
                             </div>
                         </div>
-                        <div class="group">
-                            <label class="form-label group-focus-within:text-teal transition-colors">
+                        <div style="position: relative;">
+                            <label class="form-label">
                                 <span data-translate="calc_debt">Hutang Tertunggak</span>
-                                <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-debt')" class="focus:outline-none">
-                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
+                                <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-debt')" style="background:none; border:none; cursor:pointer;">
+                                        <i class="fas fa-info-circle" style="color: #71717a; font-size: 0.9rem;"></i>
                                     </button>
-                                    <div id="tip-debt" class="info-tooltip infotip-box hidden">
+                                    <div id="tip-debt" class="info-tooltip infotip-box">
                                         <span data-translate="tip_debt"><strong>📝 Isikan:</strong> Baki terkini hutang sedia ada (kereta, pinjaman peribadi, kad kredit).<br><br><strong>💡 Sebab:</strong> Waris tidak patut diwariskan hutang. Nilai ini akan disatukan ke dalam jumlah keperluan pampasan hayat anda.</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
-                            <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
-                                <input type="text" inputmode="numeric" id="calcDebt" class="calc-currency form-input pl-12" placeholder="0" required>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 1rem; top: 0.85rem; color: #71717a; font-size: 0.85rem; font-weight: 700;">RM</span>
+                                <input type="text" inputmode="numeric" id="calcDebt" class="calc-currency form-input" style="padding-left: 3rem;" placeholder="0" required>
                             </div>
                         </div>
                     </div>
 
-                    <div class="h-px w-full bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent my-4"></div>
+                    <div style="height: 1px; width: 100%; background: rgba(255,255,255,0.08); margin: 0.5rem 0;"></div>
 
                     <!-- Row 2: Life / Hibah & Inflation -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="group">
-                            <label class="form-label group-focus-within:text-primary transition-colors">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+                        <div style="position: relative;">
+                            <label class="form-label">
                                 <span data-translate="calc_exist_life">Hayat/Hibah Sedia Ada</span>
-                                <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-exist-life')" class="focus:outline-none">
-                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
+                                <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-exist-life')" style="background:none; border:none; cursor:pointer;">
+                                        <i class="fas fa-info-circle" style="color: #71717a; font-size: 0.9rem;"></i>
                                     </button>
-                                    <div id="tip-exist-life" class="info-tooltip infotip-box hidden">
+                                    <div id="tip-exist-life" class="info-tooltip infotip-box">
                                         <span data-translate="tip_exist_life"><strong>📝 Isikan:</strong> Jumlah pampasan nyawa / hibah dari polisi sedia ada (peribadi atau majikan).<br><br><strong>💡 Sebab:</strong> Akan ditolak dari jumlah keseluruhan yang diperlukan untuk mengira baki kekosongan (gap) perlindungan yang sebenar.</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
-                            <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
-                                <input type="text" inputmode="numeric" id="calcExistLife" class="calc-currency form-input pl-12" placeholder="0" required>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 1rem; top: 0.85rem; color: #71717a; font-size: 0.85rem; font-weight: 700;">RM</span>
+                                <input type="text" inputmode="numeric" id="calcExistLife" class="calc-currency form-input" style="padding-left: 3rem;" placeholder="0" required>
                             </div>
                         </div>
-                        <div class="group">
-                            <label class="form-label group-focus-within:text-primary transition-colors">
+                        <div style="position: relative;">
+                            <label class="form-label">
                                 <span data-translate="calc_life_years">Tahun Sokongan</span>
-                                <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-life-years')" class="focus:outline-none">
-                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
+                                <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-life-years')" style="background:none; border:none; cursor:pointer;">
+                                        <i class="fas fa-info-circle" style="color: #71717a; font-size: 0.9rem;"></i>
                                     </button>
-                                    <div id="tip-life-years" class="info-tooltip infotip-box hidden">
+                                    <div id="tip-life-years" class="info-tooltip infotip-box">
                                         <span data-translate="tip_life_years"><strong>📝 Isikan:</strong> Tempoh masa sasaran tanggungan (Cadangan: 10 - 20 tahun).<br><br><strong>💡 Sebab:</strong> Mewakili jumlah tahun keluarga anda boleh meneruskan hidup selesa sementara menyesuaikan diri mencari punca pendapatan yang baharu.</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
-                            <div class="relative">
-                                <input type="number" id="calcLifeYears" class="form-input pr-20" value="10" min="1" max="50" required>
-                                <span class="absolute right-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold" data-translate="calc_years">Tahun</span>
+                            <div style="position: relative;">
+                                <input type="number" id="calcLifeYears" class="form-input" style="padding-right: 5rem;" value="10" min="1" max="50" required>
+                                <span style="position: absolute; right: 1rem; top: 0.85rem; color: #71717a; font-size: 0.85rem; font-weight: 700;" data-translate="calc_years">Tahun</span>
                             </div>
                         </div>
                         <!-- Variable: Inflation -->
-                        <div class="group">
-                            <label class="form-label group-focus-within:text-primary transition-colors">
+                        <div style="position: relative;">
+                            <label class="form-label">
                                 <span data-translate="calc_inflation">Kadar Inflasi Tahunan</span>
-                                <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-inflation')" class="focus:outline-none">
-                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
+                                <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-inflation')" style="background:none; border:none; cursor:pointer;">
+                                        <i class="fas fa-info-circle" style="color: #71717a; font-size: 0.9rem;"></i>
                                     </button>
-                                    <div id="tip-inflation" class="info-tooltip infotip-box hidden">
+                                    <div id="tip-inflation" class="info-tooltip infotip-box">
                                         <span data-translate="tip_inflation"><strong>📝 Isikan:</strong> Kadar inflasi kos sara hidup (Cadangan: 3% - 5%). Biarkan 0 jika tidak mahu mengira inflasi.<br><br><strong>💡 Sebab:</strong> Kos sara hidup akan sentiasa meningkat. Ini membantu unjuran masa hadapan anda menjadi lebih tepat dan realistik.</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
-                            <div class="relative">
-                                <input type="number" id="calcInflation" class="form-input pr-12" value="3" step="0.1" min="0" max="20" required>
-                                <span class="absolute right-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">%</span>
+                            <div style="position: relative;">
+                                <input type="number" id="calcInflation" class="form-input" style="padding-right: 3rem;" value="3" step="0.1" min="0" max="20" required>
+                                <span style="position: absolute; right: 1rem; top: 0.85rem; color: #71717a; font-size: 0.85rem; font-weight: 700;">%</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Row 3: CI -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="group">
-                            <label class="form-label group-focus-within:text-primary transition-colors">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+                        <div style="position: relative;">
+                            <label class="form-label">
                                 <span data-translate="calc_exist_ci">Sakit Kritikal Sedia Ada</span>
-                                <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-exist-ci')" class="focus:outline-none">
-                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
+                                <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-exist-ci')" style="background:none; border:none; cursor:pointer;">
+                                        <i class="fas fa-info-circle" style="color: #71717a; font-size: 0.9rem;"></i>
                                     </button>
-                                    <div id="tip-exist-ci" class="info-tooltip infotip-box hidden">
+                                    <div id="tip-exist-ci" class="info-tooltip infotip-box">
                                         <span data-translate="tip_exist_ci"><strong>📝 Isikan:</strong> Pampasan lump sum Penyakit Kritikal (CI) yang sedia ada.<br><br><strong>💡 Sebab:</strong> Akan ditolak dari jumlah sasaran CI anda. Penyakit kritikal kebiasaannya menghentikan keupayaan pesakit untuk bekerja.</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
-                            <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
-                                <input type="text" inputmode="numeric" id="calcExistCI" class="calc-currency form-input pl-12" placeholder="0" required>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 1rem; top: 0.85rem; color: #71717a; font-size: 0.85rem; font-weight: 700;">RM</span>
+                                <input type="text" inputmode="numeric" id="calcExistCI" class="calc-currency form-input" style="padding-left: 3rem;" placeholder="0" required>
                             </div>
                         </div>
-                        <div class="group">
-                            <label class="form-label group-focus-within:text-primary transition-colors">
+                        <div style="position: relative;">
+                            <label class="form-label">
                                 <span data-translate="calc_ci_years">Sokongan Sakit Kritikal</span>
-                                <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-ci-years')" class="focus:outline-none">
-                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
+                                <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-ci-years')" style="background:none; border:none; cursor:pointer;">
+                                        <i class="fas fa-info-circle" style="color: #71717a; font-size: 0.9rem;"></i>
                                     </button>
-                                    <div id="tip-ci-years" class="info-tooltip infotip-box hidden">
+                                    <div id="tip-ci-years" class="info-tooltip infotip-box">
                                         <span data-translate="tip_ci_years"><strong>📝 Isikan:</strong> Tempoh cuti rehat dari bekerja (Cadangan: 3 - 5 tahun).<br><br><strong>💡 Sebab:</strong> Bertindak menggantikan pendapatan anda semasa melalui fasa rawatan panjang (seperti kemoterapi) supaya anda boleh fokus kepada proses penyembuhan sepenuhnya.</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
-                            <div class="relative">
-                                <input type="number" id="calcCIYears" class="form-input pr-20" value="3" min="1" max="20" required>
-                                <span class="absolute right-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold" data-translate="calc_years">Tahun</span>
+                            <div style="position: relative;">
+                                <input type="number" id="calcCIYears" class="form-input" style="padding-right: 5rem;" value="3" min="1" max="20" required>
+                                <span style="position: absolute; right: 1rem; top: 0.85rem; color: #71717a; font-size: 0.85rem; font-weight: 700;" data-translate="calc_years">Tahun</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Row 4: Medical -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="group">
-                            <label class="form-label group-focus-within:text-teal transition-colors">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+                        <div style="position: relative;">
+                            <label class="form-label">
                                 <span data-translate="calc_exist_med">Had Perubatan Sedia Ada</span>
-                                <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-exist-med')" class="focus:outline-none">
-                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
+                                <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-exist-med')" style="background:none; border:none; cursor:pointer;">
+                                        <i class="fas fa-info-circle" style="color: #71717a; font-size: 0.9rem;"></i>
                                     </button>
-                                    <div id="tip-exist-med" class="info-tooltip infotip-box hidden">
+                                    <div id="tip-exist-med" class="info-tooltip infotip-box">
                                         <span data-translate="tip_exist_med"><strong>📝 Isikan:</strong> Had perlindungan tahunan kad perubatan sedia ada.<br><br><strong>💡 Sebab:</strong> Bagi mengetahui asas perlindungan (baseline) yang anda ada sekarang untuk ditolak daripada sasaran kos perubatan masa hadapan.</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
-                            <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
-                                <input type="text" inputmode="numeric" id="calcExistMed" class="calc-currency form-input pl-12" placeholder="0" required>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 1rem; top: 0.85rem; color: #71717a; font-size: 0.85rem; font-weight: 700;">RM</span>
+                                <input type="text" inputmode="numeric" id="calcExistMed" class="calc-currency form-input" style="padding-left: 3rem;" placeholder="0" required>
                             </div>
                         </div>
-                        <div class="group">
-                            <label class="form-label group-focus-within:text-teal transition-colors">
+                        <div style="position: relative;">
+                            <label class="form-label">
                                 <span data-translate="calc_target_med">Sasaran Had Perubatan (Asas)</span>
-                                <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-target-med')" class="focus:outline-none">
-                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
+                                <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-target-med')" style="background:none; border:none; cursor:pointer;">
+                                        <i class="fas fa-info-circle" style="color: #71717a; font-size: 0.9rem;"></i>
                                     </button>
-                                    <div id="tip-target-med" class="info-tooltip infotip-box hidden">
+                                    <div id="tip-target-med" class="info-tooltip infotip-box">
                                         <span data-translate="tip_target_med"><strong>📝 Isikan:</strong> Had bil hospital tahunan yang diinginkan (Cth: RM200,000).<br><br><strong>💡 Sebab:</strong> Kos perubatan hospital swasta amat tinggi. Nilai yang dimasukkan ini akan diunjurkan oleh kalkulator menggunakan kesan inflasi untuk 10 tahun ke hadapan.</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
-                            <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
-                                <input type="text" inputmode="numeric" id="calcTargetMed" class="calc-currency form-input pl-12" placeholder="200,000" required>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 1rem; top: 0.85rem; color: #71717a; font-size: 0.85rem; font-weight: 700;">RM</span>
+                                <input type="text" inputmode="numeric" id="calcTargetMed" class="calc-currency form-input" style="padding-left: 3rem;" placeholder="200,000" required>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn-primary btn-teal w-full mt-6 text-lg h-16 rounded-2xl group">
-                        <i class="fas fa-calculator mr-2 group-hover:animate-bounce"></i> <span data-translate="calc_btn">Kira Keperluan Semasa</span>
+                    <button type="submit" class="btn-primary btn-teal" style="margin-top: 1rem; border-radius: 1rem; height: 4rem; font-size: 1.1rem;">
+                        <i class="fas fa-calculator" style="margin-right: 0.5rem;"></i> <span data-translate="calc_btn">Kira Keperluan Semasa</span>
                     </button>
                 </form>
 
                 <!-- Calculator Results Layout -->
-                <div id="calcResults" class="hidden mt-16 pt-12 border-t border-slate-200 dark:border-white/10 transition-colors duration-500">
-                    <h4 class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white mb-10 text-center drop-shadow-sm transition-colors duration-500" data-translate="calc_res_title">Ringkasan Keperluan Perlindungan Anda</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div id="calcResults" style="display: none; margin-top: 3rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.08);">
+                    <h4 style="font-size: 1.5rem; font-weight: 900; color: white; margin-bottom: 2rem; text-align: center;" data-translate="calc_res_title">Ringkasan Keperluan Perlindungan Anda</h4>
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;" id="resultsGrid">
                         
                         <!-- Result: Life -->
                         <div class="result-card">
                             <div class="result-icon"><i class="fas fa-heartbeat"></i></div>
                             <h5 class="result-title" data-translate="calc_res_life">Keperluan Hayat / Hibah</h5>
                             <div id="resLifeReq" class="result-amount">RM 0</div>
-                            <div id="resLifeGap" class="mt-4 text-xs font-bold px-4 py-2 rounded-full inline-block tracking-wide">Gap: RM 0</div>
-                            <p id="descLife" class="mt-5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed text-left border-t border-slate-200 dark:border-white/10 pt-4 w-full transition-colors duration-500"></p>
+                            <div id="resLifeGap" style="margin-top: 1rem; font-size: 0.75rem; font-weight: 700; padding: 0.5rem 1rem; border-radius: 9999px; display: inline-block;">Gap: RM 0</div>
+                            <p id="descLife" style="margin-top: 1.25rem; font-size: 0.75rem; color: #a1a1aa; line-height: 1.6; text-align: left; border-top: 1px solid rgba(255,255,255,0.08); pt: 1rem;"></p>
                         </div>
                         
                         <!-- Result: CI -->
@@ -359,22 +386,22 @@
                             <div class="result-icon"><i class="fas fa-user-shield"></i></div>
                             <h5 class="result-title" data-translate="calc_res_ci">Keperluan Sakit Kritikal</h5>
                             <div id="resCIReq" class="result-amount">RM 0</div>
-                            <div id="resCIGap" class="mt-4 text-xs font-bold px-4 py-2 rounded-full inline-block tracking-wide">Gap: RM 0</div>
-                            <p id="descCI" class="mt-5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed text-left border-t border-slate-200 dark:border-white/10 pt-4 w-full transition-colors duration-500"></p>
+                            <div id="resCIGap" style="margin-top: 1rem; font-size: 0.75rem; font-weight: 700; padding: 0.5rem 1rem; border-radius: 9999px; display: inline-block;">Gap: RM 0</div>
+                            <p id="descCI" style="margin-top: 1.25rem; font-size: 0.75rem; color: #a1a1aa; line-height: 1.6; text-align: left; border-top: 1px solid rgba(255,255,255,0.08);"></p>
                         </div>
                         
                         <!-- Result: Medical -->
-                        <div class="result-card !hover:border-teal">
+                        <div class="result-card">
                             <div class="result-icon result-icon-teal"><i class="fas fa-file-medical"></i></div>
                             <h5 class="result-title" data-translate="calc_res_med">Sasaran Had Perubatan</h5>
                             <div id="resMedReq" class="result-amount">RM 0</div>
-                            <div id="resMedGap" class="mt-4 text-xs font-bold px-4 py-2 rounded-full inline-block tracking-wide">Gap: RM 0</div>
-                            <p id="descMed" class="mt-5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed text-left border-t border-slate-200 dark:border-white/10 pt-4 w-full transition-colors duration-500"></p>
+                            <div id="resMedGap" style="margin-top: 1rem; font-size: 0.75rem; font-weight: 700; padding: 0.5rem 1rem; border-radius: 9999px; display: inline-block;">Gap: RM 0</div>
+                            <p id="descMed" style="margin-top: 1.25rem; font-size: 0.75rem; color: #a1a1aa; line-height: 1.6; text-align: left; border-top: 1px solid rgba(255,255,255,0.08);"></p>
                         </div>
 
                     </div>
                     
-                    <p class="text-center text-xs text-slate-500 dark:text-zinc-500 mt-10 opacity-90 dark:opacity-70 transition-colors duration-500" data-translate="calc_disclaimer">* Anggaran ini telah diselaraskan dengan faktor inflasi sebagai rujukan asas kewangan anda.</p>
+                    <p style="text-align: center; font-size: 0.75rem; color: #71717a; margin-top: 2.5rem;" data-translate="calc_disclaimer">* Anggaran ini telah diselaraskan dengan faktor inflasi sebagai rujukan asas kewangan anda.</p>
                 </div>
             </div>
         </section>
@@ -382,6 +409,19 @@
     </main>
 
     <script>
+        // Responsive CSS adjustment for desktop grid layout
+        if (window.innerWidth >= 768) {
+            document.getElementById('needsCalculatorForm').style.gridTemplateColumns = 'repeat(3, 1fr)';
+            document.getElementById('needsCalculatorForm').children[0].style.gridColumn = 'span 3';
+            document.getElementById('needsCalculatorForm').children[1].style.gridColumn = 'span 3';
+            document.getElementById('needsCalculatorForm').children[2].style.gridColumn = 'span 3';
+            document.getElementById('needsCalculatorForm').children[3].style.gridColumn = 'span 3';
+            document.getElementById('needsCalculatorForm').children[4].style.gridColumn = 'span 3';
+            document.getElementById('needsCalculatorForm').children[5].style.gridColumn = 'span 3';
+            
+            document.getElementById('resultsGrid').style.gridTemplateColumns = 'repeat(3, 1fr)';
+        }
+
         // Opening Animation Logic
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -391,7 +431,7 @@
                     loader.remove();
                     document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
                 }, 1000);
-            }, 2500);
+            }, 2000);
         });
 
         // Language Dictionary Data
@@ -401,7 +441,6 @@
                 brand_title: "TAKAFUL SERVICES",
                 brand_sub: "by Fairuz Samsuddin",
                 
-                // Calculator Dictionary
                 calc_title: "Kalkulator Keperluan Perlindungan",
                 calc_subtitle: "Kira anggaran keperluan kewangan untuk diri & keluarga, mengambil kira kadar inflasi semasa.",
                 calc_error: "Nota: Perbelanjaan bulanan anda melebihi pendapatan bulanan. Sila semak semula.",
@@ -425,7 +464,6 @@
                 calc_covered: "Dilindungi Penuh",
                 calc_disclaimer: "* Anggaran ini telah diselaraskan dengan faktor inflasi sebagai rujukan asas kewangan anda.",
                 
-                // Calculator Tooltips
                 tip_income: "<strong>📝 Isikan:</strong> Gaji bersih bulanan, hasil sewa, & pendapatan lain.<br><br><strong>💡 Sebab:</strong> Sebagai asas kiraan jumlah penggantian pendapatan keluarga anda jika berlaku musibah.",
                 tip_expenses: "<strong>📝 Isikan:</strong> Jumlah komitmen & perbelanjaan tetap (ansuran, bil, barang dapur, Takaful).<br><br><strong>💡 Sebab:</strong> Untuk memastikan cadangan pelan perlindungan tidak membebankan aliran tunai (semakan kelayakan asas).",
                 tip_debt: "<strong>📝 Isikan:</strong> Baki terkini hutang sedia ada (kereta, pinjaman peribadi, kad kredit).<br><br><strong>💡 Sebab:</strong> Waris tidak patut diwariskan hutang. Nilai ini akan disatukan ke dalam jumlah keperluan pampasan hayat anda.",
@@ -442,7 +480,6 @@
                 brand_title: "TAKAFUL SERVICES",
                 brand_sub: "by Fairuz Samsuddin",
 
-                // Calculator Dictionary
                 calc_title: "Protection Needs Calculator",
                 calc_subtitle: "Estimate financial requirements for you & your family, factoring in current inflation rates.",
                 calc_error: "Note: Your monthly expenses exceed your monthly income. Please double-check.",
@@ -466,7 +503,6 @@
                 calc_covered: "Fully Covered",
                 calc_disclaimer: "* This estimate has been adjusted for inflation factors as a basic financial reference.",
                 
-                // Calculator Tooltips
                 tip_income: "<strong>📝 Fill in:</strong> Net monthly salary, rental, & other steady income.<br><br><strong>💡 Reason:</strong> Used as the baseline to calculate your family's income replacement amount in case of an unexpected event.",
                 tip_expenses: "<strong>📝 Fill in:</strong> Fixed commitments & monthly expenses (loans, bills, groceries, Takaful).<br><br><strong>💡 Reason:</strong> To ensure the proposed protection plan will not heavily burden your cash flow (basic affordability check).",
                 tip_debt: "<strong>📝 Fill in:</strong> Current outstanding debt balances (car, personal loans, credit cards).<br><br><strong>💡 Reason:</strong> Dependents shouldn't inherit your debt. This value is added to your baseline life protection needs.",
@@ -482,17 +518,17 @@
 
         let currentLang = 'ms';
 
-        // UI Interactions
+        // UI Interactions for Infotips
         function toggleTooltip(event, id) {
             event.stopPropagation();
             const target = document.getElementById(id);
-            const isHidden = target.classList.contains('hidden');
-            document.querySelectorAll('.info-tooltip').forEach(tip => tip.classList.add('hidden'));
-            if (isHidden) target.classList.remove('hidden');
+            const isShown = target.classList.contains('show');
+            document.querySelectorAll('.info-tooltip').forEach(tip => tip.classList.remove('show'));
+            if (!isShown) target.classList.add('show');
         }
 
         document.addEventListener('click', function() {
-            document.querySelectorAll('.info-tooltip').forEach(tip => tip.classList.add('hidden'));
+            document.querySelectorAll('.info-tooltip').forEach(tip => tip.classList.remove('show'));
         });
 
         function toggleLanguage() {
@@ -508,12 +544,12 @@
                 }
             });
 
-            if (!document.getElementById('calcResults').classList.contains('hidden')) {
+            if (!document.getElementById('calcResults').style.display || document.getElementById('calcResults').style.display !== 'none') {
                 document.getElementById('needsCalculatorForm').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
             }
         }
 
-        // Formats
+        // Currency Formatting
         const currencyInputs = document.querySelectorAll('.calc-currency');
         currencyInputs.forEach(input => {
             input.addEventListener('input', function(e) {
@@ -535,16 +571,20 @@
             return 'RM ' + Math.max(0, amount).toLocaleString('en-MY', { maximumFractionDigits: 0 });
         }
 
-        function renderTailwindGap(element, gap) {
+        function renderGapStyle(element, gap) {
             const shortfallText = translations[currentLang].calc_shortfall;
             const coveredText = translations[currentLang].calc_covered;
 
             if (gap > 0) {
                 element.innerText = shortfallText + formatCurrency(gap);
-                element.className = 'mt-4 text-xs font-bold px-4 py-2 rounded-full inline-block bg-primary/10 border border-primary/20 dark:border-primary/30 text-primary shadow-sm';
+                element.style.background = 'rgba(217, 0, 13, 0.1)';
+                element.style.border = '1px solid rgba(217, 0, 13, 0.3)';
+                element.style.color = '#ff4d4f';
             } else {
                 element.innerText = coveredText;
-                element.className = 'mt-4 text-xs font-bold px-4 py-2 rounded-full inline-block bg-teal/10 border border-teal/20 dark:border-teal/30 text-teal-700 dark:text-teal shadow-sm';
+                element.style.background = 'rgba(0, 129, 131, 0.1)';
+                element.style.border = '1px solid rgba(0, 129, 131, 0.3)';
+                element.style.color = 'var(--teal)';
             }
         }
 
@@ -572,7 +612,7 @@
             e.preventDefault();
 
             const alertBox = document.getElementById('errorAlert');
-            alertBox.classList.add('hidden');
+            alertBox.style.display = 'none';
 
             const income = parseCurrencyInput(document.getElementById('calcIncome').value);
             const expenses = parseCurrencyInput(document.getElementById('calcExpenses').value);
@@ -591,15 +631,12 @@
             const infDecimal = inflationRate / 100;
 
             if (expenses > income) {
-                alertBox.classList.remove('hidden');
+                alertBox.style.display = 'block';
             }
 
             const incomeAnnual = income * 12;
 
-            /* INFLATION LOGIC:
-               Menerapkan faedah pengkompaunan purata (average compound effect) ke atas jumlah jangkaan pendapatan.
-               Bagi mengelakkan jumlah terlampau tidak realistik, kita menggunakan kadar purata (Tahun / 2). 
-            */
+            // Calculations with compounding inflation factor
             const lifeInfFactor = Math.pow(1 + infDecimal, lifeYears > 0 ? lifeYears / 2 : 0);
             const lifeRequired = ((incomeAnnual * lifeInfFactor) * lifeYears) + debt;
             const lifeGap = lifeRequired - existingLife;
@@ -608,7 +645,6 @@
             const ciRequired = (incomeAnnual * ciInfFactor) * ciYears;
             const ciGap = ciRequired - existingCI;
 
-            // Medical assumes a standard 10-year forward projection inflation impact
             const medInfFactor = Math.pow(1 + infDecimal, 10);
             const medicalRequired = desiredMedical * medInfFactor;
             const medicalGap = medicalRequired - existingMedical;
@@ -623,7 +659,7 @@
             const descMedEn = `<strong>Why This Amount?:</strong> Your base target value has been projected with a ${inflationRate}% medical inflation over the next 10 years, ensuring adequacy against rising private hospital bills.`;
 
             const resultsDiv = document.getElementById('calcResults');
-            const isHidden = resultsDiv.classList.contains('hidden');
+            const isHidden = resultsDiv.style.display === 'none';
 
             if (isHidden || !e.isTrusted) {
                 animateValue(document.getElementById('resLifeReq'), 0, lifeRequired, 1500);
@@ -635,16 +671,16 @@
                 document.getElementById('resMedReq').innerText = formatCurrency(medicalRequired);
             }
 
-            renderTailwindGap(document.getElementById('resLifeGap'), lifeGap);
+            renderGapStyle(document.getElementById('resLifeGap'), lifeGap);
             document.getElementById('descLife').innerHTML = currentLang === 'ms' ? descLifeMs : descLifeEn;
 
-            renderTailwindGap(document.getElementById('resCIGap'), ciGap);
+            renderGapStyle(document.getElementById('resCIGap'), ciGap);
             document.getElementById('descCI').innerHTML = currentLang === 'ms' ? descCIMs : descCIEn;
 
-            renderTailwindGap(document.getElementById('resMedGap'), medicalGap);
+            renderGapStyle(document.getElementById('resMedGap'), medicalGap);
             document.getElementById('descMed').innerHTML = currentLang === 'ms' ? descMedMs : descMedEn;
 
-            resultsDiv.classList.remove('hidden');
+            resultsDiv.style.display = 'block';
             if(e.isTrusted) {
                  resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
