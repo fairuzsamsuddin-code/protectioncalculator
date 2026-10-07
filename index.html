@@ -49,32 +49,41 @@
         .scrollbar-none::-webkit-scrollbar { display: none; }
         .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
         
+        /* Glassmorphism & Core UI Utilities */
         .glass-nav { @apply bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl border-b border-slate-200 dark:border-white/5 shadow-sm dark:shadow-[0_4px_30px_rgba(0,0,0,0.5)]; }
         .glass-card { @apply bg-white/80 dark:bg-zinc-900/60 backdrop-blur-lg border border-slate-200 dark:border-white/10 shadow-xl dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-300; }
         .glass-input-container { @apply bg-slate-50/60 dark:bg-black/40 backdrop-blur-md border border-slate-200 dark:border-white/5 rounded-2xl p-6 md:p-10; }
         
+        /* Forms */
         .form-input { @apply block w-full px-4 py-3 h-12 rounded-xl bg-white dark:bg-zinc-950 border border-slate-300 dark:border-zinc-800 text-slate-800 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary focus:bg-slate-50 dark:focus:bg-black transition-all shadow-inner dark:shadow-none; }
         .form-label { @apply text-xs font-semibold text-slate-500 dark:text-zinc-400 mb-2 flex items-center tracking-wider uppercase; }
         
+        /* Buttons */
         .btn-primary { @apply relative overflow-hidden inline-flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer transition-all duration-300 bg-primary text-white hover:bg-primary-hover min-h-[3.5rem] rounded-full px-8 text-sm md:text-base font-semibold shadow-[0_4px_15px_rgba(217,0,13,0.3)] hover:shadow-[0_6px_25px_rgba(217,0,13,0.5)] hover:-translate-y-1; }
         .btn-teal { @apply bg-teal border border-teal-hover hover:bg-teal-hover shadow-md dark:shadow-[0_4px_15px_rgba(0,129,131,0.3)] dark:hover:shadow-[0_6px_25px_rgba(0,129,131,0.6)]; }
         
+        /* Animations & Interactions */
         .reveal { @apply opacity-0 translate-y-12 transition-all duration-1000 ease-[cubic-bezier(0.25,0.1,0.25,1)]; }
         .reveal.active { @apply opacity-100 translate-y-0; }
         .animation-delay-300 { animation-delay: 300ms; }
         .animation-delay-600 { animation-delay: 600ms; }
         
+        /* Result Cards */
         .result-card { @apply glass-card rounded-2xl p-8 text-center hover:border-primary group transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_35px_rgba(217,0,13,0.15)] dark:hover:shadow-[0_15px_35px_rgba(217,0,13,0.25)]; }
         .result-icon { @apply w-14 h-14 mx-auto rounded-full bg-primary/10 text-primary flex items-center justify-center text-2xl mb-4 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-inner; }
         .result-icon-teal { @apply bg-teal/10 text-teal group-hover:bg-teal group-hover:text-white; }
         .result-title { @apply text-[11px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider mb-2 transition-colors duration-500; }
         .result-amount { @apply text-3xl md:text-4xl font-black text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] transition-colors duration-500; }
+        
+        /* Infotip Container */
+        .infotip-box { @apply hidden absolute bottom-full left-1/2 z-50 mb-3 w-[260px] md:w-[320px] -translate-x-1/2 rounded-xl bg-slate-800 dark:bg-zinc-900 border border-slate-700 dark:border-white/10 px-5 py-4 text-left text-xs leading-relaxed text-white shadow-xl normal-case tracking-normal; }
       }
     </style>
 </head>
 
 <body class="bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 antialiased min-h-screen flex flex-col bg-ambient-glow-light dark:bg-ambient-glow-dark bg-fixed relative transition-colors duration-500">
 
+    <!-- Opening Animation Sequence -->
     <div id="opening-sequence" class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950 transition-opacity duration-1000">
         <div class="relative flex flex-col items-center">
             <div class="absolute w-40 h-40 bg-primary/20 rounded-full blur-[50px] animate-pulse"></div>
@@ -85,6 +94,7 @@
         </div>
     </div>
 
+    <!-- Navigation Bar -->
     <nav class="sticky top-0 z-50 glass-nav w-full transition-colors duration-500">
         <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 gap-5 w-full">
             <div class="flex items-center gap-3 shrink-0 group cursor-pointer">
@@ -102,7 +112,10 @@
         </div>
     </nav>
 
+    <!-- Main Content -->
     <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-12 box-border relative z-10">
+
+        <!-- Calculator Section -->
         <section id="kalkulator-keperluan" class="glass-card rounded-[2.5rem] overflow-visible reveal border border-slate-200 dark:border-white/10 shadow-2xl transition-colors duration-500">
             
             <div class="relative overflow-hidden rounded-t-[2.5rem] p-10 md:p-12 text-center border-b border-slate-200 dark:border-white/5">
@@ -121,20 +134,24 @@
                 <div id="errorAlert" class="hidden mb-8 p-4 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 rounded-xl text-sm font-semibold shadow-sm dark:shadow-[0_0_15px_rgba(217,0,13,0.1)] backdrop-blur-sm transition-colors duration-500" data-translate="calc_error">Nota: Perbelanjaan bulanan anda melebihi pendapatan bulanan. Sila semak semula.</div>
 
                 <form id="needsCalculatorForm" class="space-y-8 glass-input-container shadow-xl">
+                    
+                    <!-- Row 1: Income / Expense / Debt -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="group">
                             <label class="form-label group-focus-within:text-teal transition-colors">
                                 <span data-translate="calc_income">Pendapatan Bulanan</span>
                                 <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-income')" class="focus:outline-none"><i class="fas fa-info-circle text-slate-400 hover:text-teal cursor-pointer text-sm"></i></button>
-                                    <div id="tip-income" class="info-tooltip hidden absolute bottom-full left-1/2 z-50 mb-3 w-56 -translate-x-1/2 rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 text-center text-xs leading-relaxed text-white shadow-xl normal-case tracking-normal">
-                                        <span data-translate="tip_income">Gaji asas, sewa, dan pendapatan lain.</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></div>
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-income')" class="focus:outline-none">
+                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
+                                    </button>
+                                    <div id="tip-income" class="info-tooltip infotip-box">
+                                        <span data-translate="tip_income"><strong>📝 Isikan:</strong> Gaji bersih bulanan, hasil sewa, & pendapatan lain.<br><br><strong>💡 Sebab:</strong> Sebagai asas kiraan jumlah penggantian pendapatan keluarga anda jika berlaku musibah.</span>
+                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
                             <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 text-sm font-bold">RM</span>
+                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
                                 <input type="text" inputmode="numeric" id="calcIncome" class="calc-currency form-input pl-12" placeholder="0" required>
                             </div>
                         </div>
@@ -142,15 +159,17 @@
                             <label class="form-label group-focus-within:text-teal transition-colors">
                                 <span data-translate="calc_expenses">Perbelanjaan Bulanan</span>
                                 <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-expenses')" class="focus:outline-none"><i class="fas fa-info-circle text-slate-400 hover:text-teal cursor-pointer text-sm"></i></button>
-                                    <div id="tip-expenses" class="info-tooltip hidden absolute bottom-full left-1/2 z-50 mb-3 w-56 -translate-x-1/2 rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 text-center text-xs leading-relaxed text-white shadow-xl normal-case tracking-normal">
-                                        <span data-translate="tip_expenses">Cth: Ansuran rumah, bil, makanan, petrol.</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></div>
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-expenses')" class="focus:outline-none">
+                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
+                                    </button>
+                                    <div id="tip-expenses" class="info-tooltip infotip-box">
+                                        <span data-translate="tip_expenses"><strong>📝 Isikan:</strong> Jumlah komitmen & perbelanjaan tetap (ansuran, bil, barang dapur, Takaful).<br><br><strong>💡 Sebab:</strong> Untuk memastikan cadangan pelan perlindungan tidak membebankan aliran tunai (semakan kelayakan asas).</span>
+                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
                             <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 text-sm font-bold">RM</span>
+                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
                                 <input type="text" inputmode="numeric" id="calcExpenses" class="calc-currency form-input pl-12" placeholder="0" required>
                             </div>
                         </div>
@@ -158,15 +177,17 @@
                             <label class="form-label group-focus-within:text-teal transition-colors">
                                 <span data-translate="calc_debt">Hutang Tertunggak</span>
                                 <div class="relative inline-flex items-center ml-2">
-                                    <button type="button" onclick="toggleTooltip(event, 'tip-debt')" class="focus:outline-none"><i class="fas fa-info-circle text-slate-400 hover:text-teal cursor-pointer text-sm"></i></button>
-                                    <div id="tip-debt" class="info-tooltip hidden absolute bottom-full left-1/2 z-50 mb-3 w-56 -translate-x-1/2 rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 text-center text-xs leading-relaxed text-white shadow-xl normal-case tracking-normal">
-                                        <span data-translate="tip_debt">Cth: Baki pembiayaan kereta, pinjaman, kad kredit.</span>
-                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></div>
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-debt')" class="focus:outline-none">
+                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
+                                    </button>
+                                    <div id="tip-debt" class="info-tooltip infotip-box">
+                                        <span data-translate="tip_debt"><strong>📝 Isikan:</strong> Baki terkini hutang sedia ada (kereta, pinjaman peribadi, kad kredit).<br><br><strong>💡 Sebab:</strong> Waris tidak patut diwariskan hutang. Nilai ini akan disatukan ke dalam jumlah keperluan pampasan hayat anda.</span>
+                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
                                 </div>
                             </label>
                             <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 text-sm font-bold">RM</span>
+                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
                                 <input type="text" inputmode="numeric" id="calcDebt" class="calc-currency form-input pl-12" placeholder="0" required>
                             </div>
                         </div>
@@ -174,73 +195,140 @@
 
                     <div class="h-px w-full bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent my-4"></div>
 
+                    <!-- Row 2: Life / Hibah & Inflation -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="group">
                             <label class="form-label group-focus-within:text-primary transition-colors">
                                 <span data-translate="calc_exist_life">Hayat/Hibah Sedia Ada</span>
+                                <div class="relative inline-flex items-center ml-2">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-exist-life')" class="focus:outline-none">
+                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
+                                    </button>
+                                    <div id="tip-exist-life" class="info-tooltip infotip-box">
+                                        <span data-translate="tip_exist_life"><strong>📝 Isikan:</strong> Jumlah pampasan nyawa / hibah dari polisi sedia ada (peribadi atau majikan).<br><br><strong>💡 Sebab:</strong> Akan ditolak dari jumlah keseluruhan yang diperlukan untuk mengira baki kekosongan (gap) perlindungan yang sebenar.</span>
+                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
+                                    </div>
+                                </div>
                             </label>
                             <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 text-sm font-bold">RM</span>
+                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
                                 <input type="text" inputmode="numeric" id="calcExistLife" class="calc-currency form-input pl-12" placeholder="0" required>
                             </div>
                         </div>
                         <div class="group">
                             <label class="form-label group-focus-within:text-primary transition-colors">
                                 <span data-translate="calc_life_years">Tahun Sokongan</span>
+                                <div class="relative inline-flex items-center ml-2">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-life-years')" class="focus:outline-none">
+                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
+                                    </button>
+                                    <div id="tip-life-years" class="info-tooltip infotip-box">
+                                        <span data-translate="tip_life_years"><strong>📝 Isikan:</strong> Tempoh masa sasaran tanggungan (Cadangan: 10 - 20 tahun).<br><br><strong>💡 Sebab:</strong> Mewakili jumlah tahun keluarga anda boleh meneruskan hidup selesa sementara menyesuaikan diri mencari punca pendapatan yang baharu.</span>
+                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
+                                    </div>
+                                </div>
                             </label>
                             <div class="relative">
                                 <input type="number" id="calcLifeYears" class="form-input pr-20" value="10" min="1" max="50" required>
-                                <span class="absolute right-4 top-3.5 text-slate-400 text-sm font-bold" data-translate="calc_years">Tahun</span>
+                                <span class="absolute right-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold" data-translate="calc_years">Tahun</span>
                             </div>
                         </div>
+                        <!-- Variable: Inflation -->
                         <div class="group">
                             <label class="form-label group-focus-within:text-primary transition-colors">
                                 <span data-translate="calc_inflation">Kadar Inflasi Tahunan</span>
+                                <div class="relative inline-flex items-center ml-2">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-inflation')" class="focus:outline-none">
+                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
+                                    </button>
+                                    <div id="tip-inflation" class="info-tooltip infotip-box">
+                                        <span data-translate="tip_inflation"><strong>📝 Isikan:</strong> Kadar inflasi kos sara hidup (Cadangan: 3% - 5%). Biarkan 0 jika tidak mahu mengira inflasi.<br><br><strong>💡 Sebab:</strong> Kos sara hidup akan sentiasa meningkat. Ini membantu unjuran masa hadapan anda menjadi lebih tepat dan realistik.</span>
+                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
+                                    </div>
+                                </div>
                             </label>
                             <div class="relative">
                                 <input type="number" id="calcInflation" class="form-input pr-12" value="3" step="0.1" min="0" max="20" required>
-                                <span class="absolute right-4 top-3.5 text-slate-400 text-sm font-bold">%</span>
+                                <span class="absolute right-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">%</span>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Row 3: CI -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="group">
                             <label class="form-label group-focus-within:text-primary transition-colors">
                                 <span data-translate="calc_exist_ci">Sakit Kritikal Sedia Ada</span>
+                                <div class="relative inline-flex items-center ml-2">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-exist-ci')" class="focus:outline-none">
+                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
+                                    </button>
+                                    <div id="tip-exist-ci" class="info-tooltip infotip-box">
+                                        <span data-translate="tip_exist_ci"><strong>📝 Isikan:</strong> Pampasan lump sum Penyakit Kritikal (CI) yang sedia ada.<br><br><strong>💡 Sebab:</strong> Akan ditolak dari jumlah sasaran CI anda. Penyakit kritikal kebiasaannya menghentikan keupayaan pesakit untuk bekerja.</span>
+                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
+                                    </div>
+                                </div>
                             </label>
                             <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 text-sm font-bold">RM</span>
+                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
                                 <input type="text" inputmode="numeric" id="calcExistCI" class="calc-currency form-input pl-12" placeholder="0" required>
                             </div>
                         </div>
                         <div class="group">
                             <label class="form-label group-focus-within:text-primary transition-colors">
                                 <span data-translate="calc_ci_years">Sokongan Sakit Kritikal</span>
+                                <div class="relative inline-flex items-center ml-2">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-ci-years')" class="focus:outline-none">
+                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
+                                    </button>
+                                    <div id="tip-ci-years" class="info-tooltip infotip-box">
+                                        <span data-translate="tip_ci_years"><strong>📝 Isikan:</strong> Tempoh cuti rehat dari bekerja (Cadangan: 3 - 5 tahun).<br><br><strong>💡 Sebab:</strong> Bertindak menggantikan pendapatan anda semasa melalui fasa rawatan panjang (seperti kemoterapi) supaya anda boleh fokus kepada proses penyembuhan sepenuhnya.</span>
+                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
+                                    </div>
+                                </div>
                             </label>
                             <div class="relative">
                                 <input type="number" id="calcCIYears" class="form-input pr-20" value="3" min="1" max="20" required>
-                                <span class="absolute right-4 top-3.5 text-slate-400 text-sm font-bold" data-translate="calc_years">Tahun</span>
+                                <span class="absolute right-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold" data-translate="calc_years">Tahun</span>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Row 4: Medical -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="group">
                             <label class="form-label group-focus-within:text-teal transition-colors">
                                 <span data-translate="calc_exist_med">Had Perubatan Sedia Ada</span>
+                                <div class="relative inline-flex items-center ml-2">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-exist-med')" class="focus:outline-none">
+                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
+                                    </button>
+                                    <div id="tip-exist-med" class="info-tooltip infotip-box">
+                                        <span data-translate="tip_exist_med"><strong>📝 Isikan:</strong> Had perlindungan tahunan kad perubatan sedia ada.<br><br><strong>💡 Sebab:</strong> Bagi mengetahui asas perlindungan (baseline) yang anda ada sekarang untuk ditolak daripada sasaran kos perubatan masa hadapan.</span>
+                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
+                                    </div>
+                                </div>
                             </label>
                             <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 text-sm font-bold">RM</span>
+                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
                                 <input type="text" inputmode="numeric" id="calcExistMed" class="calc-currency form-input pl-12" placeholder="0" required>
                             </div>
                         </div>
                         <div class="group">
                             <label class="form-label group-focus-within:text-teal transition-colors">
-                                <span data-translate="calc_target_med">Sasaran Had Perubatan</span>
+                                <span data-translate="calc_target_med">Sasaran Had Perubatan (Asas)</span>
+                                <div class="relative inline-flex items-center ml-2">
+                                    <button type="button" onclick="toggleTooltip(event, 'tip-target-med')" class="focus:outline-none">
+                                        <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
+                                    </button>
+                                    <div id="tip-target-med" class="info-tooltip infotip-box">
+                                        <span data-translate="tip_target_med"><strong>📝 Isikan:</strong> Had bil hospital tahunan yang diinginkan (Cth: RM200,000).<br><br><strong>💡 Sebab:</strong> Kos perubatan hospital swasta amat tinggi. Nilai yang dimasukkan ini akan diunjurkan oleh kalkulator menggunakan kesan inflasi untuk 10 tahun ke hadapan.</span>
+                                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
+                                    </div>
+                                </div>
                             </label>
                             <div class="relative">
-                                <span class="absolute left-4 top-3.5 text-slate-400 text-sm font-bold">RM</span>
+                                <span class="absolute left-4 top-3.5 text-slate-400 dark:text-zinc-500 text-sm font-bold">RM</span>
                                 <input type="text" inputmode="numeric" id="calcTargetMed" class="calc-currency form-input pl-12" placeholder="200,000" required>
                             </div>
                         </div>
@@ -251,38 +339,49 @@
                     </button>
                 </form>
 
+                <!-- Calculator Results Layout -->
                 <div id="calcResults" class="hidden mt-16 pt-12 border-t border-slate-200 dark:border-white/10 transition-colors duration-500">
                     <h4 class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white mb-10 text-center drop-shadow-sm transition-colors duration-500" data-translate="calc_res_title">Ringkasan Keperluan Perlindungan Anda</h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        
+                        <!-- Result: Life -->
                         <div class="result-card">
                             <div class="result-icon"><i class="fas fa-heartbeat"></i></div>
                             <h5 class="result-title" data-translate="calc_res_life">Keperluan Hayat / Hibah</h5>
                             <div id="resLifeReq" class="result-amount">RM 0</div>
                             <div id="resLifeGap" class="mt-4 text-xs font-bold px-4 py-2 rounded-full inline-block tracking-wide">Gap: RM 0</div>
-                            <p id="descLife" class="mt-5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed text-left border-t border-slate-200 pt-4 w-full"></p>
+                            <p id="descLife" class="mt-5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed text-left border-t border-slate-200 dark:border-white/10 pt-4 w-full transition-colors duration-500"></p>
                         </div>
+                        
+                        <!-- Result: CI -->
                         <div class="result-card">
                             <div class="result-icon"><i class="fas fa-user-shield"></i></div>
                             <h5 class="result-title" data-translate="calc_res_ci">Keperluan Sakit Kritikal</h5>
                             <div id="resCIReq" class="result-amount">RM 0</div>
                             <div id="resCIGap" class="mt-4 text-xs font-bold px-4 py-2 rounded-full inline-block tracking-wide">Gap: RM 0</div>
-                            <p id="descCI" class="mt-5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed text-left border-t border-slate-200 pt-4 w-full"></p>
+                            <p id="descCI" class="mt-5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed text-left border-t border-slate-200 dark:border-white/10 pt-4 w-full transition-colors duration-500"></p>
                         </div>
+                        
+                        <!-- Result: Medical -->
                         <div class="result-card !hover:border-teal">
                             <div class="result-icon result-icon-teal"><i class="fas fa-file-medical"></i></div>
                             <h5 class="result-title" data-translate="calc_res_med">Sasaran Had Perubatan</h5>
                             <div id="resMedReq" class="result-amount">RM 0</div>
                             <div id="resMedGap" class="mt-4 text-xs font-bold px-4 py-2 rounded-full inline-block tracking-wide">Gap: RM 0</div>
-                            <p id="descMed" class="mt-5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed text-left border-t border-slate-200 pt-4 w-full"></p>
+                            <p id="descMed" class="mt-5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed text-left border-t border-slate-200 dark:border-white/10 pt-4 w-full transition-colors duration-500"></p>
                         </div>
+
                     </div>
-                    <p class="text-center text-xs text-slate-500 mt-10 opacity-90" data-translate="calc_disclaimer">* Anggaran ini telah diselaraskan dengan faktor inflasi.</p>
+                    
+                    <p class="text-center text-xs text-slate-500 dark:text-zinc-500 mt-10 opacity-90 dark:opacity-70 transition-colors duration-500" data-translate="calc_disclaimer">* Anggaran ini telah diselaraskan dengan faktor inflasi sebagai rujukan asas kewangan anda.</p>
                 </div>
             </div>
         </section>
+
     </main>
 
     <script>
+        // Opening Animation Logic
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const loader = document.getElementById('opening-sequence');
@@ -291,14 +390,17 @@
                     loader.remove();
                     document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
                 }, 1000);
-            }, 1000); 
+            }, 2500);
         });
 
+        // Language Dictionary Data
         const translations = {
             ms: {
                 anim_title: "Kalkulator Perlindungan",
                 brand_title: "TAKAFUL SERVICES",
                 brand_sub: "by Fairuz Samsuddin",
+                
+                // Calculator Dictionary
                 calc_title: "Kalkulator Keperluan Perlindungan",
                 calc_subtitle: "Kira anggaran keperluan kewangan untuk diri & keluarga, mengambil kira kadar inflasi semasa.",
                 calc_error: "Nota: Perbelanjaan bulanan anda melebihi pendapatan bulanan. Sila semak semula.",
@@ -321,21 +423,25 @@
                 calc_shortfall: "Kekurangan: ",
                 calc_covered: "Dilindungi Penuh",
                 calc_disclaimer: "* Anggaran ini telah diselaraskan dengan faktor inflasi sebagai rujukan asas kewangan anda.",
-                tip_income: "Gaji asas, sewa, dan pendapatan lain.",
-                tip_expenses: "Cth: Ansuran rumah, bil, makanan, petrol, dan caruman Takaful.",
-                tip_debt: "Cth: Baki keseluruhan pembiayaan kereta, pinjaman peribadi, kad kredit.",
-                tip_exist_life: "Jumlah pampasan sedia ada jika berlaku kematian.",
-                tip_life_years: "Berapa tahun pendapatan perlu disokong (Cadangan: 10 tahun).",
-                tip_exist_ci: "Jumlah pampasan sedia ada jika disahkan menghidap penyakit kritikal.",
-                tip_ci_years: "Anggaran cuti rehat untuk rawatan penyembuhan (Cadangan: 3 tahun).",
-                tip_exist_med: "Had limit perubatan tahunan sedia ada.",
-                tip_target_med: "Sasaran perlindungan (Cth: RM200,000). Nilai ini akan dilaraskan dengan inflasi 10 tahun ke hadapan.",
-                tip_inflation: "Anggaran kenaikan kos sara hidup tahunan (Cadangan: 3% - 5%). Biarkan 0 jika tidak mahu masukkan inflasi."
+                
+                // Calculator Tooltips
+                tip_income: "<strong>📝 Isikan:</strong> Gaji bersih bulanan, hasil sewa, & pendapatan lain.<br><br><strong>💡 Sebab:</strong> Sebagai asas kiraan jumlah penggantian pendapatan keluarga anda jika berlaku musibah.",
+                tip_expenses: "<strong>📝 Isikan:</strong> Jumlah komitmen & perbelanjaan tetap (ansuran, bil, barang dapur, Takaful).<br><br><strong>💡 Sebab:</strong> Untuk memastikan cadangan pelan perlindungan tidak membebankan aliran tunai (semakan kelayakan asas).",
+                tip_debt: "<strong>📝 Isikan:</strong> Baki terkini hutang sedia ada (kereta, pinjaman peribadi, kad kredit).<br><br><strong>💡 Sebab:</strong> Waris tidak patut diwariskan hutang. Nilai ini akan disatukan ke dalam jumlah keperluan pampasan hayat anda.",
+                tip_exist_life: "<strong>📝 Isikan:</strong> Jumlah pampasan nyawa / hibah dari polisi sedia ada (peribadi atau majikan).<br><br><strong>💡 Sebab:</strong> Akan ditolak dari jumlah keseluruhan yang diperlukan untuk mengira baki kekosongan (gap) perlindungan yang sebenar.",
+                tip_life_years: "<strong>📝 Isikan:</strong> Tempoh masa sasaran tanggungan (Cadangan: 10 - 20 tahun).<br><br><strong>💡 Sebab:</strong> Mewakili jumlah tahun keluarga anda boleh meneruskan hidup selesa sementara menyesuaikan diri mencari punca pendapatan yang baharu.",
+                tip_inflation: "<strong>📝 Isikan:</strong> Kadar inflasi kos sara hidup (Cadangan: 3% - 5%). Biarkan 0 jika tidak mahu mengira inflasi.<br><br><strong>💡 Sebab:</strong> Kos sara hidup akan sentiasa meningkat. Ini membantu unjuran masa hadapan anda menjadi lebih tepat dan realistik.",
+                tip_exist_ci: "<strong>📝 Isikan:</strong> Pampasan lump sum Penyakit Kritikal (CI) yang sedia ada.<br><br><strong>💡 Sebab:</strong> Akan ditolak dari jumlah sasaran CI anda. Penyakit kritikal kebiasaannya menghentikan keupayaan pesakit untuk bekerja.",
+                tip_ci_years: "<strong>📝 Isikan:</strong> Tempoh cuti rehat dari bekerja (Cadangan: 3 - 5 tahun).<br><br><strong>💡 Sebab:</strong> Bertindak menggantikan pendapatan anda semasa melalui fasa rawatan panjang (seperti kemoterapi) supaya anda boleh fokus kepada proses penyembuhan sepenuhnya.",
+                tip_exist_med: "<strong>📝 Isikan:</strong> Had perlindungan tahunan kad perubatan sedia ada.<br><br><strong>💡 Sebab:</strong> Bagi mengetahui asas perlindungan (baseline) yang anda ada sekarang untuk ditolak daripada sasaran kos perubatan masa hadapan.",
+                tip_target_med: "<strong>📝 Isikan:</strong> Had bil hospital tahunan yang diinginkan (Cth: RM200,000).<br><br><strong>💡 Sebab:</strong> Kos perubatan hospital swasta amat tinggi. Nilai yang dimasukkan ini akan diunjurkan oleh kalkulator menggunakan kesan inflasi untuk 10 tahun ke hadapan."
             },
             en: {
                 anim_title: "Protection Calculator",
                 brand_title: "TAKAFUL SERVICES",
                 brand_sub: "by Fairuz Samsuddin",
+
+                // Calculator Dictionary
                 calc_title: "Protection Needs Calculator",
                 calc_subtitle: "Estimate financial requirements for you & your family, factoring in current inflation rates.",
                 calc_error: "Note: Your monthly expenses exceed your monthly income. Please double-check.",
@@ -358,21 +464,24 @@
                 calc_shortfall: "Shortfall: ",
                 calc_covered: "Fully Covered",
                 calc_disclaimer: "* This estimate has been adjusted for inflation factors as a basic financial reference.",
-                tip_income: "Basic salary, rental, and other monthly earnings.",
-                tip_expenses: "Ex: Mortgage, bills, food, petrol, and Takaful contributions.",
-                tip_debt: "Ex: Total outstanding balance of car loans, personal loans, credit cards.",
-                tip_exist_life: "Total existing lump sum payout in the event of death.",
-                tip_life_years: "How many years your family needs financial support (Rule of thumb: 10 years).",
-                tip_exist_ci: "Existing lump sum payout provided if diagnosed with a critical illness.",
-                tip_ci_years: "Estimated recovery time taken off work for medical treatment (Rule of thumb: 3 years).",
-                tip_exist_med: "Current annual limit from existing medical cards.",
-                tip_target_med: "Target protection (Ex: RM 200,000). This value will be adjusted for 10 years of inflation.",
-                tip_inflation: "Estimated annual increase in living costs (Rule of thumb: 3% - 5%). Leave 0 to exclude inflation."
+                
+                // Calculator Tooltips
+                tip_income: "<strong>📝 Fill in:</strong> Net monthly salary, rental, & other steady income.<br><br><strong>💡 Reason:</strong> Used as the baseline to calculate your family's income replacement amount in case of an unexpected event.",
+                tip_expenses: "<strong>📝 Fill in:</strong> Fixed commitments & monthly expenses (loans, bills, groceries, Takaful).<br><br><strong>💡 Reason:</strong> To ensure the proposed protection plan will not heavily burden your cash flow (basic affordability check).",
+                tip_debt: "<strong>📝 Fill in:</strong> Current outstanding debt balances (car, personal loans, credit cards).<br><br><strong>💡 Reason:</strong> Dependents shouldn't inherit your debt. This value is added to your baseline life protection needs.",
+                tip_exist_life: "<strong>📝 Fill in:</strong> Life/Hibah coverage amount from existing personal or company policies.<br><br><strong>💡 Reason:</strong> Will be deducted from the total required amount to accurately find your current protection gap.",
+                tip_life_years: "<strong>📝 Fill in:</strong> Target support period (Rule of thumb: 10 - 20 years).<br><br><strong>💡 Reason:</strong> The estimated time your family needs to live comfortably while adapting to the loss of the main income provider.",
+                tip_inflation: "<strong>📝 Fill in:</strong> Inflation rate of living costs (Rule of thumb: 3% - 5%). Leave 0 to ignore inflation.<br><br><strong>💡 Reason:</strong> Living costs naturally increase over time. Including this gives a much more accurate and realistic future projection.",
+                tip_exist_ci: "<strong>📝 Fill in:</strong> Current Critical Illness lump sum coverage payout.<br><br><strong>💡 Reason:</strong> Will be deducted from your target CI needs. A critical illness almost always halts your ability to work.",
+                tip_ci_years: "<strong>📝 Fill in:</strong> Recovery period taking off work (Rule of thumb: 3 - 5 years).<br><br><strong>💡 Reason:</strong> Acts as an income replacement during long treatment phases (e.g., chemotherapy) so you can focus purely on healing.",
+                tip_exist_med: "<strong>📝 Fill in:</strong> Existing annual medical card limit.<br><br><strong>💡 Reason:</strong> Establishes the current baseline protection you hold, which will be deducted from your future medical cost targets.",
+                tip_target_med: "<strong>📝 Fill in:</strong> Desired annual limit (Ex: RM 200,000).<br><br><strong>💡 Reason:</strong> Private hospital costs rise constantly. This input is projected with 10 years of inflation by the calculator."
             }
         };
 
         let currentLang = 'ms';
 
+        // UI Interactions
         function toggleTooltip(event, id) {
             event.stopPropagation();
             const target = document.getElementById(id);
@@ -394,7 +503,8 @@
             elements.forEach(el => {
                 const key = el.getAttribute('data-translate');
                 if (translations[currentLang] && translations[currentLang][key]) {
-                    el.innerText = translations[currentLang][key];
+                    // Menggunakan innerHTML supaya tag <strong> dan <br> di dalam dictionary dapat dibaca dengan baik.
+                    el.innerHTML = translations[currentLang][key];
                 }
             });
 
@@ -403,6 +513,7 @@
             }
         }
 
+        // Formats
         const currencyInputs = document.querySelectorAll('.calc-currency');
         currencyInputs.forEach(input => {
             input.addEventListener('input', function(e) {
@@ -433,10 +544,11 @@
                 element.className = 'mt-4 text-xs font-bold px-4 py-2 rounded-full inline-block bg-primary/10 border border-primary/20 dark:border-primary/30 text-primary shadow-sm';
             } else {
                 element.innerText = coveredText;
-                element.className = 'mt-4 text-xs font-bold px-4 py-2 rounded-full inline-block bg-teal/10 border border-teal/20 dark:border-teal/30 text-teal shadow-sm';
+                element.className = 'mt-4 text-xs font-bold px-4 py-2 rounded-full inline-block bg-teal/10 border border-teal/20 dark:border-teal/30 text-teal-700 dark:text-teal shadow-sm';
             }
         }
 
+        // Number Rolling Animation
         function animateValue(obj, start, end, duration) {
             let startTimestamp = null;
             const step = (timestamp) => {
@@ -444,13 +556,18 @@
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
                 const easeOutQuad = progress * (2 - progress); 
                 const currentVal = Math.floor(easeOutQuad * (end - start) + start);
+                
                 obj.innerHTML = formatCurrency(currentVal);
-                if (progress < 1) window.requestAnimationFrame(step);
-                else obj.innerHTML = formatCurrency(end); 
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    obj.innerHTML = formatCurrency(end); 
+                }
             };
             window.requestAnimationFrame(step);
         }
 
+        // Takaful Calculator Logic (With Inflation)
         document.getElementById('needsCalculatorForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -462,18 +579,27 @@
             const debt = parseCurrencyInput(document.getElementById('calcDebt').value);
             const existingLife = parseCurrencyInput(document.getElementById('calcExistLife').value);
             const lifeYears = parseFloat(document.getElementById('calcLifeYears').value) || 0;
+            
             const existingCI = parseCurrencyInput(document.getElementById('calcExistCI').value);
             const ciYears = parseFloat(document.getElementById('calcCIYears').value) || 0;
+            
             const existingMedical = parseCurrencyInput(document.getElementById('calcExistMed').value);
             const desiredMedical = parseCurrencyInput(document.getElementById('calcTargetMed').value);
             
+            // Variable: Inflation
             const inflationRate = parseFloat(document.getElementById('calcInflation').value) || 0;
             const infDecimal = inflationRate / 100;
 
-            if (expenses > income) alertBox.classList.remove('hidden');
+            if (expenses > income) {
+                alertBox.classList.remove('hidden');
+            }
 
             const incomeAnnual = income * 12;
 
+            /* INFLATION LOGIC:
+               Menerapkan faedah pengkompaunan purata (average compound effect) ke atas jumlah jangkaan pendapatan.
+               Bagi mengelakkan jumlah terlampau tidak realistik, kita menggunakan kadar purata (Tahun / 2). 
+            */
             const lifeInfFactor = Math.pow(1 + infDecimal, lifeYears > 0 ? lifeYears / 2 : 0);
             const lifeRequired = ((incomeAnnual * lifeInfFactor) * lifeYears) + debt;
             const lifeGap = lifeRequired - existingLife;
@@ -482,16 +608,19 @@
             const ciRequired = (incomeAnnual * ciInfFactor) * ciYears;
             const ciGap = ciRequired - existingCI;
 
+            // Medical assumes a standard 10-year forward projection inflation impact
             const medInfFactor = Math.pow(1 + infDecimal, 10);
             const medicalRequired = desiredMedical * medInfFactor;
             const medicalGap = medicalRequired - existingMedical;
 
-            const descLifeMs = `<strong>Kenapa Jumlah Ini?:</strong> Menggantikan pendapatan tahunan untuk ${lifeYears} tahun (inflasi ${inflationRate}%), + selesaikan hutang (RM ${debt.toLocaleString('en-MY')}).`;
-            const descLifeEn = `<strong>Why This Amount?:</strong> Replacing annual income for ${lifeYears} years (adjusted for ${inflationRate}% inflation), + clearing debts (RM ${debt.toLocaleString('en-MY')}).`;
-            const descCIMs = `<strong>Kenapa Jumlah Ini?:</strong> Menggantikan pendapatan selama ${ciYears} tahun beserta kenaikan kos sara hidup (${inflationRate}% inflasi).`;
-            const descCIEn = `<strong>Why This Amount?:</strong> Replacing income for ${ciYears} years with rising living costs (${inflationRate}% inflation).`;
-            const descMedMs = `<strong>Kenapa Jumlah Ini?:</strong> Unjuran inflasi perubatan ${inflationRate}% untuk 10 tahun ke hadapan.`;
-            const descMedEn = `<strong>Why This Amount?:</strong> Projected with a ${inflationRate}% medical inflation over 10 years.`;
+            const descLifeMs = `<strong>Kenapa Jumlah Ini?:</strong> Menggantikan pendapatan tahunan anda untuk ${lifeYears} tahun (selari penyelarasan inflasi ${inflationRate}%), ditambah dengan penyelesaian hutang tertunggak (RM ${debt.toLocaleString('en-MY')}). Dana ini memastikan keluarga anda mampu mengekalkan kelangsungan hidup secara realistik.`;
+            const descLifeEn = `<strong>Why This Amount?:</strong> Replacing your annual income for ${lifeYears} years (adjusted for ${inflationRate}% inflation), plus clearing outstanding debts (RM ${debt.toLocaleString('en-MY')}). This ensures your family can realistically maintain their lifestyle.`;
+
+            const descCIMs = `<strong>Kenapa Jumlah Ini?:</strong> Menggantikan pendapatan anda selama ${ciYears} tahun beserta kenaikan kos sara hidup (${inflationRate}% inflasi). Dana ini membolehkan anda fokus sepenuhnya pada rawatan penyembuhan tanpa tekanan hilang gaji.`;
+            const descCIEn = `<strong>Why This Amount?:</strong> Replacing your income for ${ciYears} years along with rising living costs (${inflationRate}% inflation). This allows you to focus purely on treatment without financial stress.`;
+
+            const descMedMs = `<strong>Kenapa Jumlah Ini?:</strong> Nilai sasaran asas anda telah diunjurkan dengan inflasi medikal ${inflationRate}% untuk tempoh 10 tahun ke hadapan. Memastikan had ini mencukupi bagi menampung kenaikan mendadak bil hospital swasta.`;
+            const descMedEn = `<strong>Why This Amount?:</strong> Your base target value has been projected with a ${inflationRate}% medical inflation over the next 10 years, ensuring adequacy against rising private hospital bills.`;
 
             const resultsDiv = document.getElementById('calcResults');
             const isHidden = resultsDiv.classList.contains('hidden');
@@ -516,7 +645,9 @@
             document.getElementById('descMed').innerHTML = currentLang === 'ms' ? descMedMs : descMedEn;
 
             resultsDiv.classList.remove('hidden');
-            if(e.isTrusted) resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            if(e.isTrusted) {
+                 resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         });
     </script>
 </body>
