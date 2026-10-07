@@ -105,7 +105,7 @@
         .btn-primary { 
             position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; 
             cursor: pointer; transition: all 0.3s ease; background: var(--primary); color: white; 
-            min-h: 3.5rem; border-radius: 9999px; padding: 0 2rem; font-size: 1rem; font-weight: 600; 
+            min-height: 3.5rem; border-radius: 9999px; padding: 0 2rem; font-size: 1rem; font-weight: 600; 
             box-shadow: 0 4px 15px rgba(217,0,13,0.3); border: none; width: 100%;
         }
         .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 25px rgba(217,0,13,0.5); }
@@ -163,27 +163,29 @@
             align-items: center; justify-content: center; padding: 1rem; overflow-y: auto;
         }
         .modal-content {
-            background: #ffffff; color: #1e293b; width: 100%; max-width: 720px;
+            background: #ffffff; color: #1e293b; width: 100%; max-width: 700px;
             border-radius: 1rem; padding: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             position: relative; max-height: 95vh; overflow-y: auto;
         }
 
-        /* Strict A4 Single-Page Print Rules (No Spills) */
+        /* Strict Single-Page A4 Print Enforcement */
         @media print {
-            body * { visibility: hidden; }
-            #reportModal, #reportModal * { visibility: visible; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body, html { width: 210mm; height: 297mm; background: white !important; overflow: hidden !important; }
+            body * { visibility: hidden !important; }
+            #reportModal, #reportModal * { visibility: visible !important; }
             #reportModal { 
-                position: fixed !important; left: 0 !important; top: 0 !important; 
-                width: 100vw !important; height: 100vh !important; 
+                position: absolute !important; left: 0 !important; top: 0 !important; 
+                width: 210mm !important; height: 297mm !important; 
                 background: white !important; padding: 0 !important; margin: 0 !important;
                 display: flex !important; align-items: center; justify-content: center;
-                overflow: hidden !important;
+                overflow: hidden !important; z-index: 99999 !important;
             }
             .modal-content { 
-                box-shadow: none !important; max-height: 100vh !important; 
-                width: 100% !important; height: 100% !important; 
-                padding: 8mm 10mm !important; margin: 0 !important; border: none !important;
-                overflow: hidden !important;
+                box-shadow: none !important; max-height: 297mm !important; 
+                width: 210mm !important; height: 297mm !important; 
+                padding: 10mm 12mm !important; margin: 0 !important; border: none !important;
+                overflow: hidden !important; background: white !important;
             }
             .no-print { display: none !important; }
             @page { size: A4 portrait; margin: 0; }
@@ -488,7 +490,7 @@
     <div id="reportModal">
         <div class="modal-content">
             <!-- Modal Header Actions -->
-            <div class="no-print" style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px; gap: 8px;">
+            <div class="no-print" style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 6px; gap: 8px;">
                 <button type="button" onclick="window.print()" style="background: #0284c7; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 11px;">
                     <i class="fas fa-print" style="margin-right: 4px;"></i> <span data-translate="btn_print">Cetak / Simpan PDF</span>
                 </button>
@@ -499,24 +501,24 @@
 
             <!-- Report Body -->
             <div id="pdf-report">
-                <div style="border-bottom: 2px solid #D9000D; padding-bottom: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div style="border-bottom: 2px solid #D9000D; padding-bottom: 5px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: flex-end;">
                     <div>
-                        <h1 style="font-size: 16px; font-weight: 800; color: #D9000D; margin: 0; text-transform: uppercase;" id="pdfTitle">Laporan Keperluan Perlindungan</h1>
+                        <h1 style="font-size: 15px; font-weight: 800; color: #D9000D; margin: 0; text-transform: uppercase;" id="pdfTitle">Laporan Keperluan Perlindungan</h1>
                         <p style="margin: 2px 0 0 0; color: #64748b; font-size: 9px;" id="pdfDate"></p>
                     </div>
                     <div style="text-align: right;">
-                        <h2 style="font-size: 12px; font-weight: 700; margin: 0; color: #1e293b;">TAKAFUL SERVICES</h2>
+                        <h2 style="font-size: 11px; font-weight: 700; margin: 0; color: #1e293b;">TAKAFUL SERVICES</h2>
                         <p style="margin: 0; color: #64748b; font-size: 8px;">oleh Fairuz Samsuddin</p>
                     </div>
                 </div>
 
                 <!-- Status Banner -->
-                <div id="reportStatusBanner" style="padding: 6px; border-radius: 4px; margin-bottom: 8px; text-align: center; font-weight: bold; font-size: 11px; background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5;">
+                <div id="reportStatusBanner" style="padding: 5px; border-radius: 4px; margin-bottom: 6px; text-align: center; font-weight: bold; font-size: 10px; background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5;">
                     STATUS PERLINDUNGAN: PERLU DITAMBAHBAIK
                 </div>
 
                 <!-- Inputs Summary -->
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                     <div style="width: 48%;">
                         <h3 style="font-size: 9px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 3px;" id="pdfSub1">Maklumat Kewangan</h3>
                         <p style="font-size: 9px; display: flex; justify-content: space-between; margin: 2px 0;"><span id="pdfIncL">Pendapatan Bulanan:</span> <strong id="repIncome">RM 0</strong></p>
@@ -533,44 +535,44 @@
 
                 <!-- Table Comparison -->
                 <h3 style="font-size: 9px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 4px;" id="pdfSub3">Ringkasan Keperluan vs Sedia Ada</h3>
-                <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 9px;">
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 6px; font-size: 9px;">
                     <thead>
                         <tr style="background: #f1f5f9;">
-                            <th style="padding: 4px; border: 1px solid #cbd5e1; text-align: left; color: #0f172a;" id="pdfTh1">Kategori</th>
-                            <th style="padding: 4px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh2">Sedia Ada (RM)</th>
-                            <th style="padding: 4px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh3">Sasaran Keperluan (RM)</th>
-                            <th style="padding: 4px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh4">Kekurangan / Gap (RM)</th>
+                            <th style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: left; color: #0f172a;" id="pdfTh1">Kategori</th>
+                            <th style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh2">Sedia Ada (RM)</th>
+                            <th style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh3">Sasaran Keperluan (RM)</th>
+                            <th style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh4">Kekurangan / Gap (RM)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 4px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd1">Hayat / Hibah</td>
-                            <td style="padding: 4px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeExist">0</td>
-                            <td style="padding: 4px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeReqTbl">0</td>
-                            <td style="padding: 4px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repLifeGapTbl">0</td>
+                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd1">Hayat / Hibah</td>
+                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeExist">0</td>
+                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeReqTbl">0</td>
+                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repLifeGapTbl">0</td>
                         </tr>
                         <tr>
-                            <td style="padding: 4px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd2">Sakit Kritikal</td>
-                            <td style="padding: 4px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIExist">0</td>
-                            <td style="padding: 4px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIReqTbl">0</td>
-                            <td style="padding: 4px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repCIGapTbl">0</td>
+                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd2">Sakit Kritikal</td>
+                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIExist">0</td>
+                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIReqTbl">0</td>
+                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repCIGapTbl">0</td>
                         </tr>
                         <tr>
-                            <td style="padding: 4px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd3">Had Perubatan</td>
-                            <td style="padding: 4px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedExist">0</td>
-                            <td style="padding: 4px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedReqTbl">0</td>
-                            <td style="padding: 4px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repMedGapTbl">0</td>
+                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd3">Had Perubatan</td>
+                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedExist">0</td>
+                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedReqTbl">0</td>
+                            <td style="padding: 3px 5px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repMedGapTbl">0</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <!-- Chart -->
                 <h3 style="font-size: 9px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 4px;" id="pdfSub4">Graf Analisis Perlindungan</h3>
-                <div style="height: 120px; width: 100%; display: flex; justify-content: center; position: relative;">
+                <div style="height: 105px; width: 100%; display: flex; justify-content: center; position: relative;">
                     <canvas id="protectionChart"></canvas>
                 </div>
                 
-                <p style="font-size: 7.5px; color: #94a3b8; text-align: center; margin-top: 6px; border-top: 1px solid #e2e8f0; padding-top: 4px;" id="pdfFooter">
+                <p style="font-size: 7.5px; color: #94a3b8; text-align: center; margin-top: 5px; border-top: 1px solid #e2e8f0; padding-top: 3px;" id="pdfFooter">
                     * Laporan ini dijana melalui Kalkulator Keperluan Perlindungan dan berfungsi sebagai rujukan kewangan asas. Sila dapatkan nasihat terperinci daripada Perunding Takaful bertauliah.
                 </p>
             </div>
@@ -957,7 +959,7 @@
                 statusBanner.style.borderColor = "#fca5a5";
             }
 
-            // Draw Chart inside Modal with slight timeout to ensure visibility
+            // Draw Chart inside Modal with strict scale
             setTimeout(() => {
                 const ctx = document.getElementById('protectionChart').getContext('2d');
                 if (reportChartInstance) { reportChartInstance.destroy(); }
@@ -971,13 +973,13 @@
                                 label: translations[currentLang].chart_ext,
                                 data: [existingLife, existingCI, existingMedical],
                                 backgroundColor: '#008183',
-                                borderRadius: 4
+                                borderRadius: 3
                             },
                             {
                                 label: translations[currentLang].chart_req,
                                 data: [lifeRequired, ciRequired, medicalRequired],
                                 backgroundColor: '#D9000D',
-                                borderRadius: 4
+                                borderRadius: 3
                             }
                         ]
                     },
@@ -986,13 +988,13 @@
                         maintainAspectRatio: false,
                         animation: false,
                         plugins: {
-                            legend: { position: 'bottom', labels: { font: { family: 'Poppins', size: 9 }, boxWidth: 10, padding: 5 } }
+                            legend: { position: 'bottom', labels: { font: { family: 'Poppins', size: 8 }, boxWidth: 8, padding: 3 } }
                         },
                         scales: {
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    font: { size: 8 },
+                                    font: { size: 7 },
                                     callback: function(value) {
                                         if(value >= 1000000) return (value / 1000000) + 'M';
                                         if(value >= 1000) return (value / 1000) + 'K';
@@ -1001,7 +1003,7 @@
                                 }
                             },
                             x: {
-                                ticks: { font: { size: 8 } }
+                                ticks: { font: { size: 7 } }
                             }
                         }
                     }
