@@ -1,3 +1,14 @@
+Maaf atas kesulitan tersebut! Saya telah kenal pasti punca kepada kedua-dua masalah yang anda hadapi:
+1. Kenapa Infotip (Huruf 'i') Tak Keluar?
+Dalam kod CSS sebelum ini, saya telah meletakkan ciri hidden di dalam kelas @apply untuk .infotip-box. Ini menyebabkan kotak tersebut kekal tersembunyi (hidden) secara kekal walaupun fungsi JavaScript telah cuba membuang kelas hidden padanya. Saya telah membetulkannya dengan mengasingkan kelas hidden terus ke dalam kod HTML.
+2. Kenapa Format Jadi Teks Sahaja Bila Refresh?
+Ini adalah isu biasa apabila menggunakan Tailwind CSS melalui pautan CDN (<script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>) untuk production atau tapak web yang di-publish.
+ * Apabila anda refresh, browser cuba memuatkan kandungan HTML dengan laju. Kadangkala script Tailwind CDN ini lambat dimuat turun atau di-block oleh sistem cache/speed optimization server (contohnya jika anda menggunakan Cloudflare Pages, fitur Rocket Loader atau JS Minification boleh mengganggu script Tailwind ini).
+ * Akibatnya, browser tidak sempat menukarkan kod <style type="text/tailwindcss"> kepada CSS yang sebenar, lalu laman web anda hilang semua reka bentuk dan hanya tinggal teks.
+Cara Penyelesaian
+Di bawah adalah kod HTML yang telah disemak dan dibaiki untuk menyelesaikan isu infotip.
+Untuk isu formatting lari (jika anda menggunakan Cloudflare Pages atau hosting seumpamanya): Sila pergi ke tetapan hosting/Cloudflare anda dan Matikan (Disable) "Rocket Loader" dan "Auto Minify untuk JavaScript". Ini akan membenarkan skrip Tailwind dimuatkan dengan sempurna setiap kali page di-refresh.
+Berikut adalah kod penuh yang telah dikemas kini:
 <!DOCTYPE html>
 <html lang="ms" id="htmlTag">
 <head>
@@ -8,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
+    <!-- Script Tailwind diletakkan di atas supaya dimuatkan lebih awal -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -75,8 +87,8 @@
         .result-title { @apply text-[11px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider mb-2 transition-colors duration-500; }
         .result-amount { @apply text-3xl md:text-4xl font-black text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] transition-colors duration-500; }
         
-        /* Infotip Container */
-        .infotip-box { @apply hidden absolute bottom-full left-1/2 z-50 mb-3 w-[260px] md:w-[320px] -translate-x-1/2 rounded-xl bg-slate-800 dark:bg-zinc-900 border border-slate-700 dark:border-white/10 px-5 py-4 text-left text-xs leading-relaxed text-white shadow-xl normal-case tracking-normal; }
+        /* Infotip Container - Telah dibuang apply 'hidden' supaya toggle berfungsi */
+        .infotip-box { @apply absolute bottom-full left-1/2 z-50 mb-3 w-[260px] md:w-[320px] -translate-x-1/2 rounded-xl bg-slate-800 dark:bg-zinc-900 border border-slate-700 dark:border-white/10 px-5 py-4 text-left text-xs leading-relaxed text-white shadow-xl normal-case tracking-normal; }
       }
     </style>
 </head>
@@ -144,7 +156,7 @@
                                     <button type="button" onclick="toggleTooltip(event, 'tip-income')" class="focus:outline-none">
                                         <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
                                     </button>
-                                    <div id="tip-income" class="info-tooltip infotip-box">
+                                    <div id="tip-income" class="info-tooltip infotip-box hidden">
                                         <span data-translate="tip_income"><strong>📝 Isikan:</strong> Gaji bersih bulanan, hasil sewa, & pendapatan lain.<br><br><strong>💡 Sebab:</strong> Sebagai asas kiraan jumlah penggantian pendapatan keluarga anda jika berlaku musibah.</span>
                                         <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
@@ -162,7 +174,7 @@
                                     <button type="button" onclick="toggleTooltip(event, 'tip-expenses')" class="focus:outline-none">
                                         <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
                                     </button>
-                                    <div id="tip-expenses" class="info-tooltip infotip-box">
+                                    <div id="tip-expenses" class="info-tooltip infotip-box hidden">
                                         <span data-translate="tip_expenses"><strong>📝 Isikan:</strong> Jumlah komitmen & perbelanjaan tetap (ansuran, bil, barang dapur, Takaful).<br><br><strong>💡 Sebab:</strong> Untuk memastikan cadangan pelan perlindungan tidak membebankan aliran tunai (semakan kelayakan asas).</span>
                                         <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
@@ -180,7 +192,7 @@
                                     <button type="button" onclick="toggleTooltip(event, 'tip-debt')" class="focus:outline-none">
                                         <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
                                     </button>
-                                    <div id="tip-debt" class="info-tooltip infotip-box">
+                                    <div id="tip-debt" class="info-tooltip infotip-box hidden">
                                         <span data-translate="tip_debt"><strong>📝 Isikan:</strong> Baki terkini hutang sedia ada (kereta, pinjaman peribadi, kad kredit).<br><br><strong>💡 Sebab:</strong> Waris tidak patut diwariskan hutang. Nilai ini akan disatukan ke dalam jumlah keperluan pampasan hayat anda.</span>
                                         <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
@@ -204,7 +216,7 @@
                                     <button type="button" onclick="toggleTooltip(event, 'tip-exist-life')" class="focus:outline-none">
                                         <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
                                     </button>
-                                    <div id="tip-exist-life" class="info-tooltip infotip-box">
+                                    <div id="tip-exist-life" class="info-tooltip infotip-box hidden">
                                         <span data-translate="tip_exist_life"><strong>📝 Isikan:</strong> Jumlah pampasan nyawa / hibah dari polisi sedia ada (peribadi atau majikan).<br><br><strong>💡 Sebab:</strong> Akan ditolak dari jumlah keseluruhan yang diperlukan untuk mengira baki kekosongan (gap) perlindungan yang sebenar.</span>
                                         <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
@@ -222,7 +234,7 @@
                                     <button type="button" onclick="toggleTooltip(event, 'tip-life-years')" class="focus:outline-none">
                                         <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
                                     </button>
-                                    <div id="tip-life-years" class="info-tooltip infotip-box">
+                                    <div id="tip-life-years" class="info-tooltip infotip-box hidden">
                                         <span data-translate="tip_life_years"><strong>📝 Isikan:</strong> Tempoh masa sasaran tanggungan (Cadangan: 10 - 20 tahun).<br><br><strong>💡 Sebab:</strong> Mewakili jumlah tahun keluarga anda boleh meneruskan hidup selesa sementara menyesuaikan diri mencari punca pendapatan yang baharu.</span>
                                         <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
@@ -241,7 +253,7 @@
                                     <button type="button" onclick="toggleTooltip(event, 'tip-inflation')" class="focus:outline-none">
                                         <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
                                     </button>
-                                    <div id="tip-inflation" class="info-tooltip infotip-box">
+                                    <div id="tip-inflation" class="info-tooltip infotip-box hidden">
                                         <span data-translate="tip_inflation"><strong>📝 Isikan:</strong> Kadar inflasi kos sara hidup (Cadangan: 3% - 5%). Biarkan 0 jika tidak mahu mengira inflasi.<br><br><strong>💡 Sebab:</strong> Kos sara hidup akan sentiasa meningkat. Ini membantu unjuran masa hadapan anda menjadi lebih tepat dan realistik.</span>
                                         <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
@@ -263,7 +275,7 @@
                                     <button type="button" onclick="toggleTooltip(event, 'tip-exist-ci')" class="focus:outline-none">
                                         <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
                                     </button>
-                                    <div id="tip-exist-ci" class="info-tooltip infotip-box">
+                                    <div id="tip-exist-ci" class="info-tooltip infotip-box hidden">
                                         <span data-translate="tip_exist_ci"><strong>📝 Isikan:</strong> Pampasan lump sum Penyakit Kritikal (CI) yang sedia ada.<br><br><strong>💡 Sebab:</strong> Akan ditolak dari jumlah sasaran CI anda. Penyakit kritikal kebiasaannya menghentikan keupayaan pesakit untuk bekerja.</span>
                                         <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
@@ -281,7 +293,7 @@
                                     <button type="button" onclick="toggleTooltip(event, 'tip-ci-years')" class="focus:outline-none">
                                         <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-primary cursor-pointer text-sm"></i>
                                     </button>
-                                    <div id="tip-ci-years" class="info-tooltip infotip-box">
+                                    <div id="tip-ci-years" class="info-tooltip infotip-box hidden">
                                         <span data-translate="tip_ci_years"><strong>📝 Isikan:</strong> Tempoh cuti rehat dari bekerja (Cadangan: 3 - 5 tahun).<br><br><strong>💡 Sebab:</strong> Bertindak menggantikan pendapatan anda semasa melalui fasa rawatan panjang (seperti kemoterapi) supaya anda boleh fokus kepada proses penyembuhan sepenuhnya.</span>
                                         <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
@@ -303,7 +315,7 @@
                                     <button type="button" onclick="toggleTooltip(event, 'tip-exist-med')" class="focus:outline-none">
                                         <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
                                     </button>
-                                    <div id="tip-exist-med" class="info-tooltip infotip-box">
+                                    <div id="tip-exist-med" class="info-tooltip infotip-box hidden">
                                         <span data-translate="tip_exist_med"><strong>📝 Isikan:</strong> Had perlindungan tahunan kad perubatan sedia ada.<br><br><strong>💡 Sebab:</strong> Bagi mengetahui asas perlindungan (baseline) yang anda ada sekarang untuk ditolak daripada sasaran kos perubatan masa hadapan.</span>
                                         <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
@@ -321,7 +333,7 @@
                                     <button type="button" onclick="toggleTooltip(event, 'tip-target-med')" class="focus:outline-none">
                                         <i class="fas fa-info-circle text-slate-400 dark:text-zinc-500 hover:text-teal cursor-pointer text-sm"></i>
                                     </button>
-                                    <div id="tip-target-med" class="info-tooltip infotip-box">
+                                    <div id="tip-target-med" class="info-tooltip infotip-box hidden">
                                         <span data-translate="tip_target_med"><strong>📝 Isikan:</strong> Had bil hospital tahunan yang diinginkan (Cth: RM200,000).<br><br><strong>💡 Sebab:</strong> Kos perubatan hospital swasta amat tinggi. Nilai yang dimasukkan ini akan diunjurkan oleh kalkulator menggunakan kesan inflasi untuk 10 tahun ke hadapan.</span>
                                         <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800 dark:border-t-zinc-900"></div>
                                     </div>
@@ -503,7 +515,6 @@
             elements.forEach(el => {
                 const key = el.getAttribute('data-translate');
                 if (translations[currentLang] && translations[currentLang][key]) {
-                    // Menggunakan innerHTML supaya tag <strong> dan <br> di dalam dictionary dapat dibaca dengan baik.
                     el.innerHTML = translations[currentLang][key];
                 }
             });
@@ -652,3 +663,4 @@
     </script>
 </body>
 </html>
+
