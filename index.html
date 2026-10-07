@@ -7,6 +7,10 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- Libraries for PDF Generation and Charting -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         :root {
@@ -108,6 +112,8 @@
         .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 25px rgba(217,0,13,0.5); }
         .btn-teal { background: var(--teal); box-shadow: 0 4px 15px rgba(0,129,131,0.3); }
         .btn-teal:hover { background: var(--teal-hover); box-shadow: 0 6px 25px rgba(0,129,131,0.5); }
+        .btn-pdf { background: #1e293b; box-shadow: 0 4px 15px rgba(30,41,59,0.3); max-width: 350px; margin: 0 auto; display: inline-flex; }
+        .btn-pdf:hover { background: #0f172a; box-shadow: 0 6px 25px rgba(30,41,59,0.5); }
         
         /* Animations */
         .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1); }
@@ -150,6 +156,13 @@
             .infotip-box::after { border-color: #1e293b transparent transparent transparent; }
         }
         .infotip-box.show { display: block; }
+
+        /* Print Container (Hidden from Screen) */
+        #pdf-wrapper { position: absolute; left: -9999px; top: 0; z-index: -100; }
+        #pdf-report { 
+            width: 800px; background: #ffffff; color: #1e293b; padding: 50px; 
+            font-family: Helvetica, Arial, sans-serif; box-sizing: border-box; 
+        }
     </style>
 </head>
 
@@ -267,7 +280,7 @@
                     <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
                         <div style="position: relative;">
                             <label class="form-label">
-                                <span data-translate="calc_exist_life">Perlindungan Hayat/Hibah Sedia Ada</span>
+                                <span data-translate="calc_exist_life">Hayat/Hibah Sedia Ada</span>
                                 <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
                                     <button type="button" onclick="toggleTooltip(event, 'tip-exist-life')" style="background:none; border:none; cursor:pointer;">
                                         <i class="fas fa-info-circle" style="color: var(--text-muted); font-size: 0.9rem;"></i>
@@ -290,7 +303,7 @@
                                         <i class="fas fa-info-circle" style="color: var(--text-muted); font-size: 0.9rem;"></i>
                                     </button>
                                     <div id="tip-life-years" class="info-tooltip infotip-box">
-                                        <span data-translate="tip_life_years"><strong>📝 Isikan:</strong> Tempoh masa sasaran tanggungan (cadangan: 10–20 tahun, atau sehingga anak bongsu dijangka tamat pengajian dan mampu berdikari).<br><br><strong>💡 Sebab:</strong> Anggaran ini mewakili tempoh keluarga anda memerlukan sokongan kewangan untuk meneruskan kehidupan dengan selesa sementara menyesuaikan diri dan mencari sumber pendapatan baharu. Ia juga mengambil kira tempoh anak bongsu memerlukan sokongan sehingga tamat pengajian, mendapat pekerjaan dan mampu berdikari.</span>
+                                        <span data-translate="tip_life_years"><strong>📝 Isikan:</strong> Tempoh masa sasaran tanggungan (cadangan: 10–20 tahun).<br><br><strong>💡 Sebab:</strong> Anggaran ini mewakili tempoh keluarga anda memerlukan sokongan kewangan untuk meneruskan kehidupan.</span>
                                     </div>
                                 </div>
                             </label>
@@ -323,7 +336,7 @@
                     <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
                         <div style="position: relative;">
                             <label class="form-label">
-                                <span data-translate="calc_exist_ci">Perlindungan Sakit Kritikal Sedia Ada</span>
+                                <span data-translate="calc_exist_ci">Sakit Kritikal Sedia Ada</span>
                                 <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
                                     <button type="button" onclick="toggleTooltip(event, 'tip-exist-ci')" style="background:none; border:none; cursor:pointer;">
                                         <i class="fas fa-info-circle" style="color: var(--text-muted); font-size: 0.9rem;"></i>
@@ -340,13 +353,13 @@
                         </div>
                         <div style="position: relative;">
                             <label class="form-label">
-                                <span data-translate="calc_ci_years">Jumlah Tahun Sokongan Sakit Kritikal</span>
+                                <span data-translate="calc_ci_years">Sokongan Sakit Kritikal</span>
                                 <div style="position: relative; display: inline-flex; align-items: center; margin-left: 0.5rem;">
                                     <button type="button" onclick="toggleTooltip(event, 'tip-ci-years')" style="background:none; border:none; cursor:pointer;">
                                         <i class="fas fa-info-circle" style="color: var(--text-muted); font-size: 0.9rem;"></i>
                                     </button>
                                     <div id="tip-ci-years" class="info-tooltip infotip-box">
-                                        <span data-translate="tip_ci_years"><strong>📝 Isikan:</strong> Tempoh cuti rehat dari bekerja (Cadangan: 3 - 5 tahun).<br><br><strong>💡 Sebab:</strong> Bertindak menggantikan pendapatan anda semasa melalui fasa rawatan panjang (seperti kemoterapi) supaya anda boleh fokus kepada proses penyembuhan sepenuhnya.</span>
+                                        <span data-translate="tip_ci_years"><strong>📝 Isikan:</strong> Tempoh cuti rehat dari bekerja (Cadangan: 3 - 5 tahun).<br><br><strong>💡 Sebab:</strong> Bertindak menggantikan pendapatan anda semasa melalui fasa rawatan panjang.</span>
                                     </div>
                                 </div>
                             </label>
@@ -367,7 +380,7 @@
                                         <i class="fas fa-info-circle" style="color: var(--text-muted); font-size: 0.9rem;"></i>
                                     </button>
                                     <div id="tip-exist-med" class="info-tooltip infotip-box">
-                                        <span data-translate="tip_exist_med"><strong>📝 Isikan:</strong> Had perlindungan tahunan kad perubatan sedia ada.<br><br><strong>💡 Sebab:</strong> Bagi mengetahui asas perlindungan (baseline) yang anda ada sekarang untuk ditolak daripada sasaran kos perubatan masa hadapan.</span>
+                                        <span data-translate="tip_exist_med"><strong>📝 Isikan:</strong> Had perlindungan tahunan kad perubatan sedia ada.<br><br><strong>💡 Sebab:</strong> Bagi mengetahui asas perlindungan (baseline) yang anda ada sekarang.</span>
                                     </div>
                                 </div>
                             </label>
@@ -384,13 +397,13 @@
                                         <i class="fas fa-info-circle" style="color: var(--text-muted); font-size: 0.9rem;"></i>
                                     </button>
                                     <div id="tip-target-med" class="info-tooltip infotip-box">
-                                        <span data-translate="tip_target_med"><strong>📝 Isikan:</strong> Had bil hospital tahunan yang diinginkan (Cth: RM200,000).<br><br><strong>💡 Sebab:</strong> Kos perubatan hospital swasta amat tinggi. Nilai yang dimasukkan ini akan diunjurkan oleh kalkulator menggunakan kesan inflasi untuk 10 tahun ke hadapan.</span>
+                                        <span data-translate="tip_target_med"><strong>📝 Isikan:</strong> Had bil hospital tahunan yang diinginkan (Cth: RM200,000).<br><br><strong>💡 Sebab:</strong> Kos perubatan hospital swasta amat tinggi. Nilai ini akan diunjurkan menggunakan inflasi untuk 10 tahun ke hadapan.</span>
                                     </div>
                                 </div>
                             </label>
                             <div style="position: relative;">
                                 <span style="position: absolute; left: 1rem; top: 0.85rem; color: var(--text-muted); font-size: 0.85rem; font-weight: 700;">RM</span>
-                                <input type="text" inputmode="numeric" id="calcTargetMed" class="calc-currency form-input" style="padding-left: 3rem;" placeholder="0" required>
+                                <input type="text" inputmode="numeric" id="calcTargetMed" class="calc-currency form-input" style="padding-left: 3rem;" placeholder="200,000" required>
                             </div>
                         </div>
                     </div>
@@ -403,8 +416,8 @@
                 <!-- Calculator Results Layout -->
                 <div id="calcResults" style="display: none; margin-top: 3rem; padding-top: 3rem; border-top: 1px solid var(--border-color);">
                     <h4 style="font-size: 1.5rem; font-weight: 900; margin-bottom: 2rem; text-align: center;" data-translate="calc_res_title">Ringkasan Keperluan Perlindungan Anda</h4>
+                    
                     <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;" id="resultsGrid">
-                        
                         <!-- Result: Life -->
                         <div class="result-card">
                             <div class="result-icon"><i class="fas fa-heartbeat"></i></div>
@@ -431,31 +444,112 @@
                             <div id="resMedGap" style="margin-top: 1rem; font-size: 0.75rem; font-weight: 700; padding: 0.5rem 1rem; border-radius: 9999px; display: inline-block;">Gap: RM 0</div>
                             <p id="descMed" style="margin-top: 1.25rem; font-size: 0.75rem; color: var(--text-muted); line-height: 1.6; text-align: left; border-top: 1px solid var(--border-color); padding-top: 1rem;"></p>
                         </div>
-
                     </div>
-                    
-                    <p style="text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 2.5rem;" data-translate="calc_disclaimer">* Anggaran ini telah diselaraskan dengan faktor inflasi sebagai rujukan asas kewangan anda.</p>
+
+                    <!-- PDF Generation Button -->
+                    <div style="text-align: center; margin-top: 3rem;">
+                        <button type="button" id="btnGeneratePDF" class="btn-primary btn-pdf">
+                            <i class="fas fa-file-pdf"></i> <span data-translate="btn_pdf">Muat Turun Laporan PDF</span>
+                        </button>
+                        <p style="text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 1.5rem;" data-translate="calc_disclaimer">* Anggaran ini telah diselaraskan dengan faktor inflasi sebagai rujukan asas kewangan anda.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
+    <!-- Halaman PDF Tersembunyi (Hidden PDF Template) -->
+    <div id="pdf-wrapper">
+        <div id="pdf-report">
+            <div style="border-bottom: 3px solid #D9000D; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <h1 style="font-size: 24px; font-weight: 800; color: #D9000D; margin: 0; text-transform: uppercase;" id="pdfTitle">Laporan Keperluan Perlindungan</h1>
+                    <p style="margin: 5px 0 0 0; color: #64748b; font-size: 13px;" id="pdfDate"></p>
+                </div>
+                <div style="text-align: right;">
+                    <h2 style="font-size: 16px; font-weight: 700; margin: 0; color: #1e293b;">TAKAFUL SERVICES</h2>
+                    <p style="margin: 0; color: #64748b; font-size: 11px;">oleh Fairuz Samsuddin</p>
+                </div>
+            </div>
+
+            <!-- Status Banner -->
+            <div id="reportStatusBanner" style="padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center; font-weight: bold; font-size: 15px; background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5;">
+                STATUS PERLINDUNGAN: PERLU DITAMBAHBAIK
+            </div>
+
+            <!-- Inputs Summary -->
+            <div style="display: flex; justify-content: space-between; margin-bottom: 30px;">
+                <div style="width: 48%;">
+                    <h3 style="font-size: 13px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 10px;" id="pdfSub1">Maklumat Kewangan</h3>
+                    <p style="font-size: 12px; display: flex; justify-content: space-between; margin: 6px 0;"><span id="pdfIncL">Pendapatan Bulanan:</span> <strong id="repIncome">RM 0</strong></p>
+                    <p style="font-size: 12px; display: flex; justify-content: space-between; margin: 6px 0;"><span id="pdfExpL">Perbelanjaan Bulanan:</span> <strong id="repExpense">RM 0</strong></p>
+                    <p style="font-size: 12px; display: flex; justify-content: space-between; margin: 6px 0;"><span id="pdfDebtL">Hutang Tertunggak:</span> <strong id="repDebt">RM 0</strong></p>
+                    <p style="font-size: 12px; display: flex; justify-content: space-between; margin: 6px 0;"><span id="pdfInfL">Kadar Inflasi Diambil Kira:</span> <strong id="repInflation">3%</strong></p>
+                </div>
+                <div style="width: 48%;">
+                    <h3 style="font-size: 13px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 10px;" id="pdfSub2">Parameter Perlindungan</h3>
+                    <p style="font-size: 12px; display: flex; justify-content: space-between; margin: 6px 0;"><span id="pdfLifeYL">Tahun Sokongan Hayat:</span> <strong id="repLifeYears">10 Tahun</strong></p>
+                    <p style="font-size: 12px; display: flex; justify-content: space-between; margin: 6px 0;"><span id="pdfCIYL">Tahun Sokongan CI:</span> <strong id="repCIYears">3 Tahun</strong></p>
+                </div>
+            </div>
+
+            <!-- Table Comparison -->
+            <h3 style="font-size: 13px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 15px;" id="pdfSub3">Ringkasan Keperluan vs Sedia Ada</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 35px; font-size: 12px;">
+                <thead>
+                    <tr style="background: #f1f5f9;">
+                        <th style="padding: 10px; border: 1px solid #cbd5e1; text-align: left; color: #0f172a;" id="pdfTh1">Kategori</th>
+                        <th style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh2">Sedia Ada (RM)</th>
+                        <th style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh3">Sasaran Keperluan (RM)</th>
+                        <th style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #0f172a;" id="pdfTh4">Kekurangan / Gap (RM)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd1">Hayat / Hibah</td>
+                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeExist">0</td>
+                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repLifeReqTbl">0</td>
+                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repLifeGapTbl">0</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd2">Sakit Kritikal</td>
+                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIExist">0</td>
+                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repCIReqTbl">0</td>
+                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repCIGapTbl">0</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #cbd5e1; color: #1e293b;" id="pdfTd3">Had Perubatan</td>
+                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedExist">0</td>
+                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1e293b;" id="repMedReqTbl">0</td>
+                        <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold; color: #D9000D;" id="repMedGapTbl">0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Chart -->
+            <h3 style="font-size: 13px; text-transform: uppercase; color: #D9000D; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 15px;" id="pdfSub4">Graf Analisis Perlindungan</h3>
+            <div style="height: 250px; width: 100%; display: flex; justify-content: center;">
+                <canvas id="protectionChart"></canvas>
+            </div>
+            
+            <p style="font-size: 10px; color: #94a3b8; text-align: center; margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 15px;" id="pdfFooter">
+                * Laporan ini dijana melalui Kalkulator Keperluan Perlindungan dan berfungsi sebagai rujukan kewangan asas. Sila dapatkan nasihat terperinci daripada Perunding Takaful bertauliah.
+            </p>
+        </div>
+    </div>
+
     <script>
-        // Responsive CSS adjustment for desktop grid layout
+        // Desktop Grid Adjustment
         if (window.innerWidth >= 768) {
             document.getElementById('needsCalculatorForm').style.gridTemplateColumns = 'repeat(3, 1fr)';
-            document.getElementById('needsCalculatorForm').children[0].style.gridColumn = 'span 3';
-            document.getElementById('needsCalculatorForm').children[1].style.gridColumn = 'span 3';
-            document.getElementById('needsCalculatorForm').children[2].style.gridColumn = 'span 3';
-            document.getElementById('needsCalculatorForm').children[3].style.gridColumn = 'span 3';
-            document.getElementById('needsCalculatorForm').children[4].style.gridColumn = 'span 3';
-            document.getElementById('needsCalculatorForm').children[5].style.gridColumn = 'span 3';
-            
+            for(let i=0; i<6; i++) {
+                if(document.getElementById('needsCalculatorForm').children[i])
+                    document.getElementById('needsCalculatorForm').children[i].style.gridColumn = 'span 3';
+            }
             document.getElementById('resultsGrid').style.gridTemplateColumns = 'repeat(3, 1fr)';
         }
 
-        // Opening Animation Logic
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const loader = document.getElementById('opening-sequence');
@@ -467,7 +561,6 @@
             }, 2000);
         });
 
-        // Language Dictionary Data
         const translations = {
             ms: {
                 anim_title: "Kalkulator Perlindungan",
@@ -480,9 +573,9 @@
                 calc_income: "Pendapatan Bulanan",
                 calc_expenses: "Perbelanjaan Bulanan",
                 calc_debt: "Hutang Tertunggak",
-                calc_exist_life: "Perlindungan Hayat/Hibah Sedia Ada",
+                calc_exist_life: "Hayat/Hibah Sedia Ada",
                 calc_life_years: "Tahun Sokongan",
-                calc_exist_ci: "Perlindungan Sakit Kritikal Sedia Ada",
+                calc_exist_ci: "Sakit Kritikal Sedia Ada",
                 calc_ci_years: "Sokongan Sakit Kritikal",
                 calc_exist_med: "Had Perubatan Sedia Ada",
                 calc_target_med: "Sasaran Had Perubatan (Asas)",
@@ -496,23 +589,44 @@
                 calc_shortfall: "Kekurangan: ",
                 calc_covered: "Dilindungi Penuh",
                 calc_disclaimer: "* Anggaran ini telah diselaraskan dengan faktor inflasi sebagai rujukan asas kewangan anda.",
+                btn_pdf: "Muat Turun Laporan PDF",
                 
-                tip_income: "<strong>📝 Isikan:</strong> Gaji bersih bulanan, hasil sewa, & pendapatan lain.<br><br><strong>💡 Sebab:</strong> Sebagai asas kiraan jumlah penggantian pendapatan keluarga anda jika berlaku musibah.",
-                tip_expenses: "<strong>📝 Isikan:</strong> Jumlah komitmen & perbelanjaan tetap (ansuran, bil, barang dapur, Takaful).<br><br><strong>💡 Sebab:</strong> Untuk memastikan cadangan pelan perlindungan tidak membebankan aliran tunai (semakan kelayakan asas).",
-                tip_debt: "<strong>📝 Isikan:</strong> Baki terkini hutang sedia ada (kereta, pinjaman peribadi, kad kredit).<br><br><strong>💡 Sebab:</strong> Waris tidak patut diwariskan hutang. Nilai ini akan disatukan ke dalam jumlah keperluan pampasan hayat anda.",
-                tip_exist_life: "<strong>📝 Isikan:</strong> Jumlah pampasan nyawa / hibah dari polisi sedia ada (peribadi atau majikan).<br><br><strong>💡 Sebab:</strong> Akan ditolak dari jumlah keseluruhan yang diperlukan untuk mengira baki kekosongan (gap) perlindungan yang sebenar.",
-                tip_life_years: "<strong>📝 Isikan:</strong> Tempoh masa sasaran tanggungan (cadangan: 10–20 tahun, atau sehingga anak bongsu dijangka tamat pengajian dan mampu berdikari).<br><br><strong>💡 Sebab:</strong> Anggaran ini mewakili tempoh keluarga anda memerlukan sokongan kewangan untuk meneruskan kehidupan dengan selesa sementara menyesuaikan diri dan mencari sumber pendapatan baharu. Ia juga mengambil kira tempoh anak bongsu memerlukan sokongan sehingga tamat pengajian, mendapat pekerjaan dan mampu berdikari.",
-                tip_inflation: "<strong>📝 Isikan:</strong> Kadar inflasi kos sara hidup (Cadangan: 3% - 5%). Biarkan 0 jika tidak mahu mengira inflasi.<br><br><strong>💡 Sebab:</strong> Kos sara hidup akan sentiasa meningkat. Ini membantu unjuran masa hadapan anda menjadi lebih tepat dan realistik.",
-                tip_exist_ci: "<strong>📝 Isikan:</strong> Pampasan lump sum Penyakit Kritikal (CI) yang sedia ada.<br><br><strong>💡 Sebab:</strong> Akan ditolak dari jumlah sasaran CI anda. Penyakit kritikal kebiasaannya menghentikan keupayaan pesakit untuk bekerja.",
-                tip_ci_years: "<strong>📝 Isikan:</strong> Tempoh cuti rehat dari bekerja (Cadangan: 3 - 5 tahun).<br><br><strong>💡 Sebab:</strong> Bertindak menggantikan pendapatan anda semasa melalui fasa rawatan panjang (seperti kemoterapi) supaya anda boleh fokus kepada proses penyembuhan sepenuhnya.",
-                tip_exist_med: "<strong>📝 Isikan:</strong> Had perlindungan tahunan kad perubatan sedia ada.<br><br><strong>💡 Sebab:</strong> Bagi mengetahui asas perlindungan (baseline) yang anda ada sekarang untuk ditolak daripada sasaran kos perubatan masa hadapan.",
-                tip_target_med: "<strong>📝 Isikan:</strong> Had bil hospital tahunan yang diinginkan (Cth: RM200,000).<br><br><strong>💡 Sebab:</strong> Kos perubatan hospital swasta amat tinggi. Nilai yang dimasukkan ini akan diunjurkan oleh kalkulator menggunakan kesan inflasi untuk 10 tahun ke hadapan."
+                // PDF Text
+                pdf_title: "LAPORAN KEPERLUAN PERLINDUNGAN",
+                pdf_date: "Tarikh: ",
+                pdf_sub1: "Maklumat Kewangan",
+                pdf_sub2: "Parameter Perlindungan",
+                pdf_sub3: "Ringkasan Keperluan vs Sedia Ada",
+                pdf_sub4: "Graf Analisis Perlindungan",
+                pdf_th1: "Kategori",
+                pdf_th2: "Sedia Ada (RM)",
+                pdf_th3: "Sasaran Keperluan (RM)",
+                pdf_th4: "Kekurangan / Gap (RM)",
+                pdf_td1: "Hayat / Hibah",
+                pdf_td2: "Sakit Kritikal",
+                pdf_td3: "Had Perubatan",
+                pdf_footer: "* Laporan ini dijana melalui Kalkulator Keperluan Perlindungan dan berfungsi sebagai rujukan kewangan asas. Sila dapatkan nasihat terperinci daripada Perunding Takaful bertauliah.",
+                status_good: "STATUS PERLINDUNGAN: LENGKAP & KUKUH",
+                status_mod: "STATUS PERLINDUNGAN: SEDERHANA (ADA KEKURANGAN)",
+                status_crit: "STATUS PERLINDUNGAN: KRITIKAL (PERLU DITAMBAHBAIK)",
+                chart_req: "Keperluan",
+                chart_ext: "Sedia Ada",
+
+                tip_income: "<strong>📝 Isikan:</strong> Gaji bersih bulanan, hasil sewa, & pendapatan lain.<br><br><strong>💡 Sebab:</strong> Sebagai asas kiraan jumlah penggantian pendapatan keluarga anda.",
+                tip_expenses: "<strong>📝 Isikan:</strong> Jumlah komitmen & perbelanjaan tetap.<br><br><strong>💡 Sebab:</strong> Semakan kelayakan aliran tunai.",
+                tip_debt: "<strong>📝 Isikan:</strong> Baki terkini hutang sedia ada.<br><br><strong>💡 Sebab:</strong> Waris tidak patut diwariskan hutang.",
+                tip_exist_life: "<strong>📝 Isikan:</strong> Jumlah pampasan nyawa dari polisi sedia ada.<br><br><strong>💡 Sebab:</strong> Akan ditolak dari sasaran untuk mencari gap.",
+                tip_life_years: "<strong>📝 Isikan:</strong> Tempoh masa sasaran tanggungan (cadangan: 10–20 tahun).<br><br><strong>💡 Sebab:</strong> Tempoh sokongan kewangan keluarga meneruskan kehidupan.",
+                tip_inflation: "<strong>📝 Isikan:</strong> Kadar inflasi kos sara hidup.<br><br><strong>💡 Sebab:</strong> Membantu unjuran masa hadapan menjadi lebih tepat.",
+                tip_exist_ci: "<strong>📝 Isikan:</strong> Pampasan CI sedia ada.<br><br><strong>💡 Sebab:</strong> Penyakit kritikal menghentikan keupayaan pesakit untuk bekerja.",
+                tip_ci_years: "<strong>📝 Isikan:</strong> Tempoh rehat bekerja (Cadangan: 3 - 5 tahun).<br><br><strong>💡 Sebab:</strong> Penggantian pendapatan fasa rawatan panjang.",
+                tip_exist_med: "<strong>📝 Isikan:</strong> Had tahunan kad perubatan sedia ada.",
+                tip_target_med: "<strong>📝 Isikan:</strong> Had bil hospital tahunan diinginkan (Cth: RM200,000)."
             },
             en: {
                 anim_title: "Protection Calculator",
                 brand_title: "TAKAFUL SERVICES",
                 brand_sub: "by Fairuz Samsuddin",
-
                 calc_title: "Protection Needs Calculator",
                 calc_subtitle: "Estimate financial requirements for you & your family, factoring in current inflation rates.",
                 calc_error: "Note: Your monthly expenses exceed your monthly income. Please double-check.",
@@ -535,23 +649,45 @@
                 calc_shortfall: "Shortfall: ",
                 calc_covered: "Fully Covered",
                 calc_disclaimer: "* This estimate has been adjusted for inflation factors as a basic financial reference.",
+                btn_pdf: "Download PDF Report",
                 
-                tip_income: "<strong>📝 Fill in:</strong> Net monthly salary, rental, & other steady income.<br><br><strong>💡 Reason:</strong> Used as the baseline to calculate your family's income replacement amount in case of an unexpected event.",
-                tip_expenses: "<strong>📝 Fill in:</strong> Fixed commitments & monthly expenses (loans, bills, groceries, Takaful).<br><br><strong>💡 Reason:</strong> To ensure the proposed protection plan will not heavily burden your cash flow (basic affordability check).",
-                tip_debt: "<strong>📝 Fill in:</strong> Current outstanding debt balances (car, personal loans, credit cards).<br><br><strong>💡 Reason:</strong> Dependents shouldn't inherit your debt. This value is added to your baseline life protection needs.",
-                tip_exist_life: "<strong>📝 Fill in:</strong> Life/Hibah coverage amount from existing personal or company policies.<br><br><strong>💡 Reason:</strong> Will be deducted from the total required amount to accurately find your current protection gap.",
-                tip_life_years: "<strong>📝 Fill in:</strong> Target period for supporting your dependants (suggested: 10–20 years, or until your youngest child is expected to graduate and become financially independent).<br><br><strong>💡 Reason:</strong> This estimates how long your family may need financial support to maintain a comfortable standard of living while adjusting and finding new sources of income. It also considers how long your youngest child may need support until they graduate, find a job, and become financially independent.",
-                tip_inflation: "<strong>📝 Fill in:</strong> Inflation rate of living costs (Rule of thumb: 3% - 5%). Leave 0 to ignore inflation.<br><br><strong>💡 Reason:</strong> Living costs naturally increase over time. Including this gives a much more accurate and realistic future projection.",
-                tip_exist_ci: "<strong>📝 Fill in:</strong> Current Critical Illness lump sum coverage payout.<br><br><strong>💡 Reason:</strong> Will be deducted from your target CI needs. A critical illness almost always halts your ability to work.",
-                tip_ci_years: "<strong>📝 Fill in:</strong> Recovery period taking off work (Rule of thumb: 3 - 5 years).<br><br><strong>💡 Reason:</strong> Acts as an income replacement during long treatment phases (e.g., chemotherapy) so you can focus purely on healing.",
-                tip_exist_med: "<strong>📝 Fill in:</strong> Existing annual medical card limit.<br><br><strong>💡 Reason:</strong> Establishes the current baseline protection you hold, which will be deducted from your future medical cost targets.",
-                tip_target_med: "<strong>📝 Fill in:</strong> Desired annual limit (Ex: RM 200,000).<br><br><strong>💡 Reason:</strong> Private hospital costs rise constantly. This input is projected with 10 years of inflation by the calculator."
+                // PDF Text
+                pdf_title: "PROTECTION NEEDS REPORT",
+                pdf_date: "Date: ",
+                pdf_sub1: "Financial Information",
+                pdf_sub2: "Protection Parameters",
+                pdf_sub3: "Requirements vs Existing Summary",
+                pdf_sub4: "Protection Analysis Chart",
+                pdf_th1: "Category",
+                pdf_th2: "Existing (RM)",
+                pdf_th3: "Target Required (RM)",
+                pdf_th4: "Shortfall / Gap (RM)",
+                pdf_td1: "Life / Hibah",
+                pdf_td2: "Critical Illness",
+                pdf_td3: "Medical Limit",
+                pdf_footer: "* This report is generated via the Protection Needs Calculator and serves as a basic financial reference. Please seek detailed advice from a certified Takaful Consultant.",
+                status_good: "PROTECTION STATUS: COMPLETE & SECURE",
+                status_mod: "PROTECTION STATUS: MODERATE (GAPS EXIST)",
+                status_crit: "PROTECTION STATUS: CRITICAL (NEEDS IMPROVEMENT)",
+                chart_req: "Required",
+                chart_ext: "Existing",
+
+                tip_income: "<strong>📝 Fill in:</strong> Net monthly salary, rental, & other steady income.",
+                tip_expenses: "<strong>📝 Fill in:</strong> Fixed commitments & monthly expenses.",
+                tip_debt: "<strong>📝 Fill in:</strong> Current outstanding debt balances.",
+                tip_exist_life: "<strong>📝 Fill in:</strong> Life/Hibah coverage from existing policies.",
+                tip_life_years: "<strong>📝 Fill in:</strong> Target support period (Rule of thumb: 10 - 20 years).",
+                tip_inflation: "<strong>📝 Fill in:</strong> Inflation rate of living costs.",
+                tip_exist_ci: "<strong>📝 Fill in:</strong> Current CI lump sum coverage payout.",
+                tip_ci_years: "<strong>📝 Fill in:</strong> Recovery period taking off work (Rule of thumb: 3 - 5 yrs).",
+                tip_exist_med: "<strong>📝 Fill in:</strong> Existing annual medical card limit.",
+                tip_target_med: "<strong>📝 Fill in:</strong> Desired annual limit (Ex: RM 200,000)."
             }
         };
 
         let currentLang = 'ms';
+        let reportChartInstance = null;
 
-        // UI Interactions for Infotips
         function toggleTooltip(event, id) {
             event.stopPropagation();
             const target = document.getElementById(id);
@@ -577,12 +713,11 @@
                 }
             });
 
-            if (!document.getElementById('calcResults').style.display || document.getElementById('calcResults').style.display !== 'none') {
+            if (document.getElementById('calcResults').style.display === 'block') {
                 document.getElementById('needsCalculatorForm').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
             }
         }
 
-        // Currency Formatting
         const currencyInputs = document.querySelectorAll('.calc-currency');
         currencyInputs.forEach(input => {
             input.addEventListener('input', function(e) {
@@ -612,7 +747,7 @@
                 element.innerText = shortfallText + formatCurrency(gap);
                 element.style.background = 'rgba(217, 0, 13, 0.1)';
                 element.style.border = '1px solid rgba(217, 0, 13, 0.3)';
-                element.style.color = '#ff4d4f';
+                element.style.color = '#ef4444';
             } else {
                 element.innerText = coveredText;
                 element.style.background = 'rgba(0, 129, 131, 0.1)';
@@ -621,7 +756,6 @@
             }
         }
 
-        // Number Rolling Animation
         function animateValue(obj, start, end, duration) {
             let startTimestamp = null;
             const step = (timestamp) => {
@@ -631,16 +765,12 @@
                 const currentVal = Math.floor(easeOutQuad * (end - start) + start);
                 
                 obj.innerHTML = formatCurrency(currentVal);
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                } else {
-                    obj.innerHTML = formatCurrency(end); 
-                }
+                if (progress < 1) window.requestAnimationFrame(step);
+                else obj.innerHTML = formatCurrency(end); 
             };
             window.requestAnimationFrame(step);
         }
 
-        // Takaful Calculator Logic (With Inflation)
         document.getElementById('needsCalculatorForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -659,7 +789,6 @@
             const existingMedical = parseCurrencyInput(document.getElementById('calcExistMed').value);
             const desiredMedical = parseCurrencyInput(document.getElementById('calcTargetMed').value);
             
-            // Variable: Inflation
             const inflationRate = parseFloat(document.getElementById('calcInflation').value) || 0;
             const infDecimal = inflationRate / 100;
 
@@ -669,7 +798,6 @@
 
             const incomeAnnual = income * 12;
 
-            // Calculations with compounding inflation factor
             const lifeInfFactor = Math.pow(1 + infDecimal, lifeYears > 0 ? lifeYears / 2 : 0);
             const lifeRequired = ((incomeAnnual * lifeInfFactor) * lifeYears) + debt;
             const lifeGap = lifeRequired - existingLife;
@@ -682,27 +810,21 @@
             const medicalRequired = desiredMedical * medInfFactor;
             const medicalGap = medicalRequired - existingMedical;
 
-            const descLifeMs = `<strong>Kenapa Jumlah Ini?:</strong> Menggantikan pendapatan tahunan anda untuk ${lifeYears} tahun (selari penyelarasan inflasi ${inflationRate}%), ditambah dengan penyelesaian hutang tertunggak (RM ${debt.toLocaleString('en-MY')}). Dana ini memastikan keluarga anda mampu mengekalkan kelangsungan hidup secara realistik.`;
-            const descLifeEn = `<strong>Why This Amount?:</strong> Replacing your annual income for ${lifeYears} years (adjusted for ${inflationRate}% inflation), plus clearing outstanding debts (RM ${debt.toLocaleString('en-MY')}). This ensures your family can realistically maintain their lifestyle.`;
+            // Update UI Screen Results
+            const descLifeMs = `<strong>Kenapa Jumlah Ini?:</strong> Menggantikan pendapatan tahunan anda untuk ${lifeYears} tahun (selari penyelarasan inflasi ${inflationRate}%), ditambah dengan penyelesaian hutang tertunggak (RM ${debt.toLocaleString('en-MY')}).`;
+            const descLifeEn = `<strong>Why This Amount?:</strong> Replacing your annual income for ${lifeYears} years (adjusted for ${inflationRate}% inflation), plus clearing outstanding debts (RM ${debt.toLocaleString('en-MY')}).`;
 
-            const descCIMs = `<strong>Kenapa Jumlah Ini?:</strong> Menggantikan pendapatan anda selama ${ciYears} tahun beserta kenaikan kos sara hidup (${inflationRate}% inflasi). Dana ini membolehkan anda fokus sepenuhnya pada rawatan penyembuhan tanpa tekanan hilang gaji.`;
-            const descCIEn = `<strong>Why This Amount?:</strong> Replacing your income for ${ciYears} years along with rising living costs (${inflationRate}% inflation). This allows you to focus purely on treatment without financial stress.`;
+            const descCIMs = `<strong>Kenapa Jumlah Ini?:</strong> Menggantikan pendapatan anda selama ${ciYears} tahun beserta kenaikan kos sara hidup (${inflationRate}% inflasi).`;
+            const descCIEn = `<strong>Why This Amount?:</strong> Replacing your income for ${ciYears} years along with rising living costs (${inflationRate}% inflation).`;
 
-            const descMedMs = `<strong>Kenapa Jumlah Ini?:</strong> Nilai sasaran asas anda telah diunjurkan dengan inflasi medikal ${inflationRate}% untuk tempoh 10 tahun ke hadapan. Memastikan had ini mencukupi bagi menampung kenaikan mendadak bil hospital swasta.`;
-            const descMedEn = `<strong>Why This Amount?:</strong> Your base target value has been projected with a ${inflationRate}% medical inflation over the next 10 years, ensuring adequacy against rising private hospital bills.`;
+            const descMedMs = `<strong>Kenapa Jumlah Ini?:</strong> Nilai sasaran asas anda telah diunjurkan dengan inflasi medikal ${inflationRate}% untuk tempoh 10 tahun ke hadapan.`;
+            const descMedEn = `<strong>Why This Amount?:</strong> Your base target value has been projected with a ${inflationRate}% medical inflation over the next 10 years.`;
 
             const resultsDiv = document.getElementById('calcResults');
-            const isHidden = resultsDiv.style.display === 'none';
-
-            if (isHidden || !e.isTrusted) {
-                animateValue(document.getElementById('resLifeReq'), 0, lifeRequired, 1500);
-                animateValue(document.getElementById('resCIReq'), 0, ciRequired, 1500);
-                animateValue(document.getElementById('resMedReq'), 0, medicalRequired, 1500);
-            } else {
-                document.getElementById('resLifeReq').innerText = formatCurrency(lifeRequired);
-                document.getElementById('resCIReq').innerText = formatCurrency(ciRequired);
-                document.getElementById('resMedReq').innerText = formatCurrency(medicalRequired);
-            }
+            
+            animateValue(document.getElementById('resLifeReq'), 0, lifeRequired, 1500);
+            animateValue(document.getElementById('resCIReq'), 0, ciRequired, 1500);
+            animateValue(document.getElementById('resMedReq'), 0, medicalRequired, 1500);
 
             renderGapStyle(document.getElementById('resLifeGap'), lifeGap);
             document.getElementById('descLife').innerHTML = currentLang === 'ms' ? descLifeMs : descLifeEn;
@@ -717,7 +839,169 @@
             if(e.isTrusted) {
                  resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
+
+            // ==========================================
+            // UPDATE HIDDEN PDF REPORT DATA
+            // ==========================================
+            
+            // Text Translations for PDF
+            const d = new Date();
+            const dateString = d.toLocaleDateString(currentLang === 'ms' ? 'ms-MY' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('pdfDate').innerText = translations[currentLang].pdf_date + dateString;
+            document.getElementById('pdfTitle').innerText = translations[currentLang].pdf_title;
+            document.getElementById('pdfSub1').innerText = translations[currentLang].pdf_sub1;
+            document.getElementById('pdfSub2').innerText = translations[currentLang].pdf_sub2;
+            document.getElementById('pdfSub3').innerText = translations[currentLang].pdf_sub3;
+            document.getElementById('pdfSub4').innerText = translations[currentLang].pdf_sub4;
+            document.getElementById('pdfTh1').innerText = translations[currentLang].pdf_th1;
+            document.getElementById('pdfTh2').innerText = translations[currentLang].pdf_th2;
+            document.getElementById('pdfTh3').innerText = translations[currentLang].pdf_th3;
+            document.getElementById('pdfTh4').innerText = translations[currentLang].pdf_th4;
+            document.getElementById('pdfTd1').innerText = translations[currentLang].pdf_td1;
+            document.getElementById('pdfTd2').innerText = translations[currentLang].pdf_td2;
+            document.getElementById('pdfTd3').innerText = translations[currentLang].pdf_td3;
+            document.getElementById('pdfFooter').innerText = translations[currentLang].pdf_footer;
+            
+            document.getElementById('pdfIncL').innerText = translations[currentLang].calc_income + ":";
+            document.getElementById('pdfExpL').innerText = translations[currentLang].calc_expenses + ":";
+            document.getElementById('pdfDebtL').innerText = translations[currentLang].calc_debt + ":";
+            document.getElementById('pdfInfL').innerText = translations[currentLang].calc_inflation + ":";
+            document.getElementById('pdfLifeYL').innerText = translations[currentLang].calc_life_years + ":";
+            document.getElementById('pdfCIYL').innerText = translations[currentLang].calc_ci_years + ":";
+
+            // Values
+            document.getElementById('repIncome').innerText = formatCurrency(income);
+            document.getElementById('repExpense').innerText = formatCurrency(expenses);
+            document.getElementById('repDebt').innerText = formatCurrency(debt);
+            document.getElementById('repInflation').innerText = inflationRate + "%";
+            document.getElementById('repLifeYears').innerText = lifeYears + " " + translations[currentLang].calc_years;
+            document.getElementById('repCIYears').innerText = ciYears + " " + translations[currentLang].calc_years;
+
+            // Table Data
+            document.getElementById('repLifeExist').innerText = formatCurrency(existingLife);
+            document.getElementById('repLifeReqTbl').innerText = formatCurrency(lifeRequired);
+            
+            let gLife = document.getElementById('repLifeGapTbl');
+            if(lifeGap > 0) { gLife.innerText = formatCurrency(lifeGap); gLife.style.color = '#D9000D'; }
+            else { gLife.innerText = translations[currentLang].calc_covered; gLife.style.color = '#008183'; }
+
+            document.getElementById('repCIExist').innerText = formatCurrency(existingCI);
+            document.getElementById('repCIReqTbl').innerText = formatCurrency(ciRequired);
+            
+            let gCI = document.getElementById('repCIGapTbl');
+            if(ciGap > 0) { gCI.innerText = formatCurrency(ciGap); gCI.style.color = '#D9000D'; }
+            else { gCI.innerText = translations[currentLang].calc_covered; gCI.style.color = '#008183'; }
+
+            document.getElementById('repMedExist').innerText = formatCurrency(existingMedical);
+            document.getElementById('repMedReqTbl').innerText = formatCurrency(medicalRequired);
+            
+            let gMed = document.getElementById('repMedGapTbl');
+            if(medicalGap > 0) { gMed.innerText = formatCurrency(medicalGap); gMed.style.color = '#D9000D'; }
+            else { gMed.innerText = translations[currentLang].calc_covered; gMed.style.color = '#008183'; }
+
+            // Determine Status Logic
+            let gapCount = 0;
+            if(lifeGap > 0) gapCount++;
+            if(ciGap > 0) gapCount++;
+            if(medicalGap > 0) gapCount++;
+
+            let statusBanner = document.getElementById('reportStatusBanner');
+            if (gapCount === 0) {
+                statusBanner.innerText = translations[currentLang].status_good;
+                statusBanner.style.background = "#ecfdf5";
+                statusBanner.style.color = "#059669";
+                statusBanner.style.borderColor = "#6ee7b7";
+            } else if (gapCount === 1 || gapCount === 2) {
+                statusBanner.innerText = translations[currentLang].status_mod;
+                statusBanner.style.background = "#fffbeb";
+                statusBanner.style.color = "#d97706";
+                statusBanner.style.borderColor = "#fcd34d";
+            } else {
+                statusBanner.innerText = translations[currentLang].status_crit;
+                statusBanner.style.background = "#fef2f2";
+                statusBanner.style.color = "#ef4444";
+                statusBanner.style.borderColor = "#fca5a5";
+            }
+
+            // Draw Chart for PDF
+            const ctx = document.getElementById('protectionChart').getContext('2d');
+            if (reportChartInstance) { reportChartInstance.destroy(); }
+            
+            reportChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [translations[currentLang].pdf_td1, translations[currentLang].pdf_td2, translations[currentLang].pdf_td3],
+                    datasets: [
+                        {
+                            label: translations[currentLang].chart_ext,
+                            data: [existingLife, existingCI, existingMedical],
+                            backgroundColor: '#008183',
+                            borderRadius: 4
+                        },
+                        {
+                            label: translations[currentLang].chart_req,
+                            data: [lifeRequired, ciRequired, medicalRequired],
+                            backgroundColor: '#D9000D',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false, // Turn off animation so html2pdf captures it instantly
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: 'Helvetica', size: 12 } } }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    if(value >= 1000000) return (value / 1000000) + 'M';
+                                    if(value >= 1000) return (value / 1000) + 'K';
+                                    return value;
+                                },
+                                font: { family: 'Helvetica' }
+                            }
+                        },
+                        x: { ticks: { font: { family: 'Helvetica', size: 12 } } }
+                    }
+                }
+            });
         });
+
+        // Generate PDF Click Event
+        document.getElementById('btnGeneratePDF').addEventListener('click', function() {
+            // Re-trigger submit to ensure all latest values and translations are updated right before printing
+            document.getElementById('needsCalculatorForm').dispatchEvent(new Event('submit', { cancelable: false, bubbles: false }));
+            
+            const element = document.getElementById('pdf-report');
+            
+            const opt = {
+                margin:       0,
+                filename:     currentLang === 'ms' ? 'Laporan_Keperluan_Perlindungan.pdf' : 'Protection_Needs_Report.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Change button text to indicate loading
+            const originalBtnHtml = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            this.disabled = true;
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                this.innerHTML = originalBtnHtml;
+                this.disabled = false;
+            }).catch(err => {
+                console.error("PDF Generation Error", err);
+                this.innerHTML = originalBtnHtml;
+                this.disabled = false;
+                alert("Ralat semasa menjana PDF. Sila cuba lagi.");
+            });
+        });
+
     </script>
 </body>
 </html>
